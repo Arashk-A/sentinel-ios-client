@@ -54,16 +54,4 @@ final class ContextBuilder {
         }
         return WalletService(for: walletAddress, securityService: securityService)
     }
-
-    func buildTunnelsManager(completion: @escaping (TunnelsService) -> Void) {
-        TunnelsService.create { result in
-            switch result {
-            case .failure(let error):
-                fatalError("failed to create a manager due to \(error), terminate")
-
-            case .success(let tunnelsManager):
-                completion(tunnelsManager)
-            }
-        }
-    }
 }

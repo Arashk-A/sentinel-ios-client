@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import SentinelWallet
+import NetworkExtension
 
 enum SubscriptionsState {
     case empty
@@ -37,6 +38,8 @@ enum HomeModelEvent {
 
     case select(server: DNSServerType)
     case setNumberOfNodesInContinent
+    
+    case setTunnelStatus(ConnectionStatus)
 }
 
 final class HomeModel {
@@ -51,6 +54,7 @@ final class HomeModel {
 
     private var subscriptions: [SentinelWallet.Subscription] = []
     private var reloadOnNextAppear = false
+    private var statusObservationToken: NotificationToken?
     
     private var cancellables = Set<AnyCancellable>()
 
@@ -79,6 +83,8 @@ extension HomeModel {
             .map { .set(subscribedNodes: $0) }
             .subscribe(eventSubject)
             .store(in: &cancellables)
+        
+        startObservingStatuses()
     }
     
     var numberOfNodesInContinent: [Continent: Int] {
@@ -87,6 +93,10 @@ extension HomeModel {
     
     func refreshDNS() {
         eventSubject.send(.select(server: context.dnsServersStorage.selectedDNS()))
+    }
+
+    func refreshStatus() {
+        eventSubject.send(.setTunnelStatus(.init(from: context.tunnelManager.isTunnelActive)))
     }
 
     func setNodes() {
@@ -156,6 +166,18 @@ extension HomeModel {
                 log.debug(info)
             case .failure(let error):
                 self?.show(error: error)
+            }
+        }
+    }
+    
+    private func startObservingStatuses() {
+        statusObservationToken = NotificationCenter.default.observe(
+            name: .NEVPNStatusDidChange,
+            object: nil,
+            queue: OperationQueue.main
+        ) { [weak self] statusChangeNotification in
+            if let session = statusChangeNotification.object as? NETunnelProviderSession {
+                self?.eventSubject.send(.setTunnelStatus(.init(from: session.status == .connected)))
             }
         }
     }

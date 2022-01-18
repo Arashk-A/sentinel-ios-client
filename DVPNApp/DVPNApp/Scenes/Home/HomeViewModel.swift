@@ -10,7 +10,6 @@ import FlagKit
 import SentinelWallet
 import Combine
 import UIKit.UIImage
-import NetworkExtension
 
 enum NodeType: CaseIterable {
     case subscribed
@@ -81,8 +80,6 @@ final class HomeViewModel: ObservableObject {
     @Published var server: DNSServerType = .default
     
     @Published var numberOfNodesInContinent: [Continent: Int] = [:]
-
-    private var statusObservationToken: NotificationToken?
     @Published private(set) var connectionStatus: ConnectionStatus = .disconnected
     
     @Published private(set) var subscriptionsState: SubscriptionsState = .empty
@@ -92,7 +89,6 @@ final class HomeViewModel: ObservableObject {
         self.router = router
 
         handeEvents()
-        startObservingStatuses()
 
         $currentPage
             .sink(receiveValue: {
@@ -110,10 +106,12 @@ final class HomeViewModel: ObservableObject {
         model.refreshDNS()
         model.subscribeToEvents()
         model.setNodes()
+        model.refreshStatus()
     }
     
     func viewWillAppear() {
         model.connectIfNeeded()
+        model.refreshStatus()
     }
 }
 
@@ -233,6 +231,8 @@ extension HomeViewModel {
                     self.update(to: server)
                 case .setNumberOfNodesInContinent:
                     self.numberOfNodesInContinent = self.model.numberOfNodesInContinent
+                case let .setTunnelStatus(status):
+                    self.connectionStatus = status
                 }
             }
             .store(in: &cancellables)
@@ -253,18 +253,6 @@ extension HomeViewModel {
             
             if !subscriptions.contains(where: { $0.id == model.id }) {
                 subscriptions.append(model)
-            }
-        }
-    }
-
-    private func startObservingStatuses() {
-        statusObservationToken = NotificationCenter.default.observe(
-            name: .NEVPNStatusDidChange,
-            object: nil,
-            queue: OperationQueue.main
-        ) { [weak self] statusChangeNotification in
-            if let session = statusChangeNotification.object as? NETunnelProviderSession {
-                self?.connectionStatus = .init(from: session.status == .connected)
             }
         }
     }
