@@ -18,20 +18,20 @@ struct AccountCreationView: View {
     
     var walletAddress: some View {
         Button(action: viewModel.didTapCopyAddress) {
-            ZStack(alignment: .leading) {
+            ZStack(alignment: .topLeading) {
                 Text(viewModel.address ?? "")
                     .applyTextStyle(.whiteMain(ofSize: 11, weight: .medium))
                     .padding(.bottom, 10)
                     .padding([.horizontal, .top], 8)
                     .border(Asset.Colors.borderGray.color.asColor, width: 1)
                     .cornerRadius(2)
-                    .padding(.top, 20)
+                    .padding(.top, 5)
                 
                 HStack {
                     Spacer().frame(width: 10, height: 10)
                     Text(L10n.AccountCreation.walletAddress)
                         .applyTextStyle(.textBody)
-                        .padding([.horizontal], 5)
+                        .padding(.horizontal, 5)
                         .background(Asset.Colors.accentColor.color.asColor)
                 }
                 .padding(.bottom, 12)
