@@ -65,6 +65,13 @@ final class HomeModel {
                 context.nodesService.loadNodesInfo(for: nodes)
             }
         }
+        
+        context.nodesService.isAllLoaded
+            .sink(receiveValue: { [weak self] isAllLoaded in
+                if isAllLoaded {
+                    self?.eventSubject.send(.setNumberOfNodesInContinent)
+                }
+            }).store(in: &cancellables)
     }
 }
 
