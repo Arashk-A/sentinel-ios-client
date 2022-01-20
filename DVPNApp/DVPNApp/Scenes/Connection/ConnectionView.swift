@@ -12,29 +12,16 @@ struct ConnectionView: View {
     init(viewModel: ConnectionViewModel) {
         self.viewModel = viewModel
     }
-
+    
     var body: some View {
-        GeometryReader { gProxy in
-            ScrollView {
-                contentView
-                    .background(GeometryReader {
-                        // Calculate height by consumed background and store in view preference
-                        Color.clear.preference(
-                            key: ViewHeightKey.self,
-                            value: $0.frame(in: .local).size.height
-                        )
-                    })
-                    .onAppear { viewModel.viewWillAppear() }
-                    .onReceive(
-                        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-                    ) { _ in
-                        viewModel.didEnterForeground()
-                    }
-            }
-            .onPreferenceChange(ViewHeightKey.self) {
-                self.fitInScreen = $0 < gProxy.size.height
-            }
-            .disabled(self.fitInScreen)
+        ScrollView {
+            contentView
+                .onAppear { viewModel.viewWillAppear() }
+                .onReceive(
+                    NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+                ) { _ in
+                    viewModel.didEnterForeground()
+                }
         }
         .background(Asset.Colors.accentColor.color.asColor)
         .edgesIgnoringSafeArea(.bottom)
@@ -118,15 +105,6 @@ extension ConnectionView {
             }
             .padding(.bottom, 44)
         }
-    }
-}
-
-// MARK: - ViewHeightKey
-
-struct ViewHeightKey: PreferenceKey {
-    static var defaultValue: CGFloat { 0 }
-    static func reduce(value: inout Value, nextValue: () -> Value) {
-        value = value + nextValue()
     }
 }
 
