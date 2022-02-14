@@ -9,7 +9,6 @@ import Foundation
 import Accessibility
 
 private enum Keys: String {
-    case needOpenPlans
     case shouldConnect
     case didPassOnboarding
 

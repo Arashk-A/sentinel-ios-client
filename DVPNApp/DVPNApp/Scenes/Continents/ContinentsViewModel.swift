@@ -29,8 +29,8 @@ final class ContinentsViewModel: ObservableObject {
     enum Route {
         case error(Error)
         case connect
-        case subscribe(node: DVPNNodeInfo, delegate: PlansViewModelDelegate)
-        case openNodes(Continent, delegate: PlansViewModelDelegate)
+        case subscribe(node: DVPNNodeInfo, delegate: NodeSubscriptionViewModelDelegate)
+        case openNodes(Continent, delegate: NodeSubscriptionViewModelDelegate)
     }
     
     private(set) var nodes: Set<SentinelNode> = []
@@ -66,9 +66,9 @@ final class ContinentsViewModel: ObservableObject {
     }
 }
 
-// MARK: - PlansViewModelDelegate
+// MARK: - NodeSubscriptionViewModelDelegate
 
-extension ContinentsViewModel: PlansViewModelDelegate {
+extension ContinentsViewModel: NodeSubscriptionViewModelDelegate {
     func openConnection() {
         model.connectIfNeeded()
     }

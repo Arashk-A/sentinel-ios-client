@@ -1,5 +1,5 @@
 //
-//  PlansView.swift
+//  NodeSubscriptionView.swift
 //  Test
 //
 //  Created by Aleksandr Litreev on 12.08.2021.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PlansView: View {
+struct NodeSubscriptionView: View {
     
-    @ObservedObject private var viewModel: PlansViewModel
+    @ObservedObject private var viewModel: NodeSubscriptionViewModel
 
-    init(viewModel: PlansViewModel) {
+    init(viewModel: NodeSubscriptionViewModel) {
         self.viewModel = viewModel
     }
     

@@ -43,8 +43,8 @@ extension ConnectionCoordinator: RouterType {
             show(message: error.localizedDescription)
         case .warning(let error):
             show(message: error.localizedDescription, theme: .warning)
-        case let .openPlans(node, delegate):
-            ModulesFactory.shared.makePlansModule(node: node, delegate: delegate, for: navigation)
+        case let .openSubscription(node, delegate):
+            ModulesFactory.shared.makeNodeSubscriptionModule(node: node, delegate: delegate, for: navigation)
         case let .dismiss(isEnabled):
             setBackNavigationEnability(isEnabled: isEnabled)
         case let .resubscribe(completion):

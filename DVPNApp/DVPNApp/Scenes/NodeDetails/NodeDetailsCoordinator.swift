@@ -54,7 +54,7 @@ extension NodeDetailsCoordinator: RouterType {
         case let .error(error):
             show(message: error.localizedDescription)
         case let .subscribe(node, delegate):
-            ModulesFactory.shared.makePlansModule(node: node, delegate: delegate, for: navigation)
+            ModulesFactory.shared.makeNodeSubscriptionModule(node: node, delegate: delegate, for: navigation)
         case .connect:
             ModulesFactory.shared.makeConnectionModule(for: navigation)
         case .dismiss:

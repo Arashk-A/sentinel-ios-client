@@ -1,5 +1,5 @@
 //
-//  PlansViewModel.swift
+//  NodeSubscriptionViewModel.swift
 //  DVPNApp
 //
 //  Created by Aleksandr Litreev on 12.08.2021.
@@ -18,17 +18,17 @@ private struct Constants {
 }
 private let constants = Constants()
 
-protocol PlansViewModelDelegate: AnyObject {
+protocol NodeSubscriptionViewModelDelegate: AnyObject {
     func openConnection()
 }
 
-final class PlansViewModel: ObservableObject {
+final class NodeSubscriptionViewModel: ObservableObject {
     typealias Router = AnyRouter<Route>
     
-    private let model: PlansModel
+    private let model: NodeSubscriptionModel
     private let router: Router
 
-    private weak var delegate: PlansViewModelDelegate?
+    private weak var delegate: NodeSubscriptionViewModelDelegate?
 
     enum Route {
         case error(Error)
@@ -56,7 +56,7 @@ final class PlansViewModel: ObservableObject {
     
     private let formatter = NumberFormatter()
     
-    init(model: PlansModel, router: Router, delegate: PlansViewModelDelegate?) {
+    init(model: NodeSubscriptionModel, router: Router, delegate: NodeSubscriptionViewModelDelegate?) {
         self.model = model
         self.router = router
         self.delegate = delegate
@@ -94,7 +94,7 @@ final class PlansViewModel: ObservableObject {
 
 // MARK: - Counter
     
-extension PlansViewModel {
+extension NodeSubscriptionViewModel {
     func togglePlus() {
         UIImpactFeedbackGenerator.lightFeedback()
         guard gbToBuy < constants.maxAllowedGB else {
@@ -118,7 +118,7 @@ extension PlansViewModel {
 
 // MARK: - Buttons actions
 
-extension PlansViewModel {
+extension NodeSubscriptionViewModel {
     func didTapSubscribe() {
         UIImpactFeedbackGenerator.lightFeedback()
         router.play(
@@ -144,7 +144,7 @@ extension PlansViewModel {
 
 // MARK: - Private
 
-extension PlansViewModel {
+extension NodeSubscriptionViewModel {
     private func show(error: Error) {
         isLoading = false
         guard let grpcError = error as? GRPC.GRPCError.RPCTimedOut else {

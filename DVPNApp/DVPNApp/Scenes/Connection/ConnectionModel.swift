@@ -24,7 +24,7 @@ enum ConnectionModelEvent {
     case updateTimer(startDate: Date?)
     
     /// When the quota is over
-    case openPlans(for: DVPNNodeInfo)
+    case openSubscription(for: DVPNNodeInfo)
     case resubscribe(to: DVPNNodeInfo)
 }
 
@@ -149,7 +149,7 @@ extension ConnectionModel {
                 return false
             }
             
-            eventSubject.send(.openPlans(for: selectedNode))
+            eventSubject.send(.openSubscription(for: selectedNode))
             eventSubject.send(.updateConnection(status: .disconnected))
             eventSubject.send(.setButton(isLoading: false))
             return false

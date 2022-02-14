@@ -102,12 +102,12 @@ extension ModulesFactory {
         ExtraCoordinator(context: context, navigation: navigation).start()
     }
 
-    func makePlansModule(
+    func makeNodeSubscriptionModule(
         node: DVPNNodeInfo,
-        delegate: PlansViewModelDelegate?,
+        delegate: NodeSubscriptionViewModelDelegate?,
         for navigation: UINavigationController
     ) {
-        PlansCoordinator(context: context, navigation: navigation, node: node, delegate: delegate).start()
+        NodeSubscriptionCoordinator(context: context, navigation: navigation, node: node, delegate: delegate).start()
     }
 
     func makeDNSSettingsModule(
@@ -120,7 +120,7 @@ extension ModulesFactory {
     
     func makeAvailableNodesModule(
         continent: Continent,
-        delegate: PlansViewModelDelegate?,
+        delegate: NodeSubscriptionViewModelDelegate?,
         for navigation: UINavigationController
     ) {
         AvailableNodesCoordinator(
@@ -248,13 +248,4 @@ extension ModulesFactory {
 
         return view
     }
-
-//    func getPlansScene() -> PlansView {
-//        let coordinator = PlansCoordinator(context: context, navigation: UINavigationController(), node: nil)
-//        let model = PlansModel(context: context, node: nil)
-//        let viewModel = PlansViewModel(model: model, router: coordinator.asRouter())
-//        let view = PlansView(viewModel: viewModel)
-//
-//        return view
-//    }
 }

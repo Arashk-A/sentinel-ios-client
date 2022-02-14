@@ -1,5 +1,5 @@
 //
-//  PlansModel.swift
+//  NodeSubscriptionModel.swift
 //  DVPNApp
 //
 //  Created by Aleksandr Litreev on 12.08.2021.
@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SentinelWallet
 
-enum PlansModelEvent {
+enum NodeSubscriptionModelEvent {
     case error(Error)
     case updatePayment(countryName: String, price: String, fee: Int)
     case processPayment(Result<TransactionResult, Error>)
@@ -17,7 +17,7 @@ enum PlansModelEvent {
     case openConnection
 }
 
-enum PlansModelError: LocalizedError {
+enum NodeSubscriptionModelError: LocalizedError {
     case paymentFailed
 
     var errorDescription: String? {
@@ -28,12 +28,12 @@ enum PlansModelError: LocalizedError {
     }
 }
 
-final class PlansModel {
+final class NodeSubscriptionModel {
     typealias Context = HasSentinelService & HasWalletService & HasConnectionInfoStorage & HasNodesService
     private let context: Context
 
-    private let eventSubject = PassthroughSubject<PlansModelEvent, Never>()
-    var eventPublisher: AnyPublisher<PlansModelEvent, Never> {
+    private let eventSubject = PassthroughSubject<NodeSubscriptionModelEvent, Never>()
+    var eventPublisher: AnyPublisher<NodeSubscriptionModelEvent, Never> {
         eventSubject.eraseToAnyPublisher()
     }
     private var cancellables = Set<AnyCancellable>()
@@ -46,7 +46,7 @@ final class PlansModel {
     }
 }
 
-extension PlansModel {
+extension NodeSubscriptionModel {
     var address: String {
         context.walletService.accountAddress
     }
@@ -54,7 +54,7 @@ extension PlansModel {
     func refresh() {
         $node.eraseToAnyPublisher()
             .map { [context] in
-                PlansModelEvent.updatePayment(
+                NodeSubscriptionModelEvent.updatePayment(
                     countryName: $0.location.country,
                     price: $0.price,
                     fee: context.walletService.fee
@@ -75,7 +75,6 @@ extension PlansModel {
     }
 
     func checkBalanceAndSubscribe(deposit: CoinToken, plan: String, price: String) {
-        let selectedPlan = SelectedPlan(node: node, deposit: deposit, planString: plan, price: price)
         context.walletService.fetchBalance { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -91,7 +90,7 @@ extension PlansModel {
                     return
                 }
 
-                self.subscribe(to: selectedPlan)
+                self.subscribe(with: deposit)
             }
         }
     }
@@ -99,27 +98,28 @@ extension PlansModel {
 
 // MARK: - Private
 
-extension PlansModel {
+extension NodeSubscriptionModel {
     private func show(error: Error) {
         log.error(error)
         eventSubject.send(.error(error))
     }
 
-    private func subscribe(to selectedPlan: SelectedPlan) {
-        context.sentinelService.subscribe(to: node.address, deposit: selectedPlan.deposit) { [weak self] result in
+    private func subscribe(with deposit: CoinToken) {
+        context.sentinelService.subscribe(to: node.address, deposit: deposit) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .failure(let error):
-                self?.eventSubject.send(.processPayment(.failure(error)))
+                self.eventSubject.send(.processPayment(.failure(error)))
             case .success(let response):
                 guard response.isSuccess else {
-                    self?.eventSubject.send(.processPayment(.failure(PlansModelError.paymentFailed)))
+                    self.eventSubject.send(.processPayment(.failure(NodeSubscriptionModelError.paymentFailed)))
                     return
                 }
                 
-                self?.context.nodesService.loadSubscriptions(completion: { _ in })
-                self?.context.connectionInfoStorage.set(lastSelectedNode: selectedPlan.node.address)
-                self?.context.connectionInfoStorage.set(shouldConnect: true)
-                self?.eventSubject.send(.processPayment(.success(response)))
+                self.context.nodesService.loadSubscriptions(completion: { _ in })
+                self.context.connectionInfoStorage.set(lastSelectedNode: self.node.address)
+                self.context.connectionInfoStorage.set(shouldConnect: true)
+                self.eventSubject.send(.processPayment(.success(response)))
             }
         }
     }

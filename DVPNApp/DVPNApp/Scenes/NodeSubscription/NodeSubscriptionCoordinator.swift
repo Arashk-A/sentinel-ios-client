@@ -1,5 +1,5 @@
 //
-//  PlansCoordinator.swift
+//  NodeSubscriptionCoordinator.swift
 //  DVPNApp
 //
 //  Created by Lika Vorobyeva on 12.08.2021.
@@ -8,19 +8,19 @@
 import SwiftUI
 import SentinelWallet
 
-final class PlansCoordinator: CoordinatorType {
+final class NodeSubscriptionCoordinator: CoordinatorType {
     private weak var navigation: UINavigationController?
     private weak var rootController: UIViewController?
 
-    private let context: PlansModel.Context
+    private let context: NodeSubscriptionModel.Context
     private let node: DVPNNodeInfo
-    private weak var delegate: PlansViewModelDelegate?
+    private weak var delegate: NodeSubscriptionViewModelDelegate?
 
     init(
-        context: PlansModel.Context,
+        context: NodeSubscriptionModel.Context,
         navigation: UINavigationController,
         node: DVPNNodeInfo,
-        delegate: PlansViewModelDelegate?
+        delegate: NodeSubscriptionViewModelDelegate?
     ) {
         self.context = context
         self.navigation = navigation
@@ -29,9 +29,9 @@ final class PlansCoordinator: CoordinatorType {
     }
 
     func start() {
-        let addTokensModel = PlansModel(context: context, node: node)
-        let addTokensViewModel = PlansViewModel(model: addTokensModel, router: asRouter(), delegate: delegate)
-        let addTokensView = PlansView(viewModel: addTokensViewModel)
+        let addTokensModel = NodeSubscriptionModel(context: context, node: node)
+        let addTokensViewModel = NodeSubscriptionViewModel(model: addTokensModel, router: asRouter(), delegate: delegate)
+        let addTokensView = NodeSubscriptionView(viewModel: addTokensViewModel)
         let controller = UIHostingController(rootView: addTokensView)
         controller.view.backgroundColor = .clear
         controller.modalPresentationStyle = .overFullScreen
@@ -44,8 +44,8 @@ final class PlansCoordinator: CoordinatorType {
 
 // MARK: - Handle events
 
-extension PlansCoordinator: RouterType {
-    func play(event: PlansViewModel.Route) {
+extension NodeSubscriptionCoordinator: RouterType {
+    func play(event: NodeSubscriptionViewModel.Route) {
         switch event {
         case let .error(error):
             show(message: error.localizedDescription)
@@ -63,7 +63,7 @@ extension PlansCoordinator: RouterType {
 
 // MARK: - Private
 
-extension PlansCoordinator {
+extension NodeSubscriptionCoordinator {
     private func showSubscribeAlert(
         name: String,
         completion: @escaping (Bool) -> Void

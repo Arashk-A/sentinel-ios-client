@@ -64,7 +64,7 @@
 		7554E2C126D4B82A001355F7 /* AccountInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7554E2C026D4B82A001355F7 /* AccountInfoModel.swift */; };
 		7554E2C426D4BB03001355F7 /* DNSSettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7554E2C326D4BB03001355F7 /* DNSSettingsRowView.swift */; };
 		75568D7226E5C62100166E5F /* ConnectionModelError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75568D7126E5C62100166E5F /* ConnectionModelError.swift */; };
-		755A4F2426C581F10057704C /* PlansCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755A4F2326C581F10057704C /* PlansCoordinator.swift */; };
+		755A4F2426C581F10057704C /* NodeSubscriptionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755A4F2326C581F10057704C /* NodeSubscriptionCoordinator.swift */; };
 		755B3AA4274BE8A6009E2D75 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 755B3AA3274BE8A6009E2D75 /* RevenueCat */; };
 		755B3AAD274BE8DE009E2D75 /* PurchasesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755B3AA6274BE8DE009E2D75 /* PurchasesViewModel.swift */; };
 		755B3AAE274BE8DE009E2D75 /* PurchasesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755B3AA7274BE8DE009E2D75 /* PurchasesModel.swift */; };
@@ -94,7 +94,6 @@
 		759DE5C02715866C00DC7757 /* DNSSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759DE5BC2715866C00DC7757 /* DNSSettingsViewModel.swift */; };
 		759DE5C12715866C00DC7757 /* DNSSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759DE5BD2715866C00DC7757 /* DNSSettingsView.swift */; };
 		759DE5C427158B1E00DC7757 /* DNSServerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759DE5C327158B1E00DC7757 /* DNSServerType.swift */; };
-		75B0D55426CB9A85009ECAFC /* SelectedPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0D55326CB9A85009ECAFC /* SelectedPlan.swift */; };
 		75B0D55C26CBB370009ECAFC /* UINavigationBar+Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0D55B26CBB370009ECAFC /* UINavigationBar+Styles.swift */; };
 		75B0D55E26CBB633009ECAFC /* UIViewController+NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0D55D26CBB633009ECAFC /* UIViewController+NavigationBar.swift */; };
 		75B0D56026CD265E009ECAFC /* UserDefaultsStorageStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0D55F26CD265E009ECAFC /* UserDefaultsStorageStrategy.swift */; };
@@ -187,9 +186,9 @@
 		C64B495E26B8B3F70004A692 /* ConnectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64B495A26B8B3F70004A692 /* ConnectionModel.swift */; };
 		C64ED2FB26C50CAE00222CA4 /* ContinentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED2F526C50CAE00222CA4 /* ContinentsViewModel.swift */; };
 		C64ED2FE26C50CAE00222CA4 /* ContinentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED2F926C50CAE00222CA4 /* ContinentsModel.swift */; };
-		C64ED32C26C57FE900222CA4 /* PlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED32426C57FE900222CA4 /* PlansView.swift */; };
-		C64ED32D26C57FE900222CA4 /* PlansViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED32526C57FE900222CA4 /* PlansViewModel.swift */; };
-		C64ED33126C57FE900222CA4 /* PlansModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED32B26C57FE900222CA4 /* PlansModel.swift */; };
+		C64ED32C26C57FE900222CA4 /* NodeSubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED32426C57FE900222CA4 /* NodeSubscriptionView.swift */; };
+		C64ED32D26C57FE900222CA4 /* NodeSubscriptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED32526C57FE900222CA4 /* NodeSubscriptionViewModel.swift */; };
+		C64ED33126C57FE900222CA4 /* NodeSubscriptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ED32B26C57FE900222CA4 /* NodeSubscriptionModel.swift */; };
 		C64ED33426C5B26800222CA4 /* SwiftMessages in Frameworks */ = {isa = PBXBuildFile; productRef = C64ED33326C5B26800222CA4 /* SwiftMessages */; };
 		C680E89C270DE0E90042453D /* SentinelWallet in Frameworks */ = {isa = PBXBuildFile; productRef = C680E89B270DE0E90042453D /* SentinelWallet */; };
 		C6EFFF30267C866C00DD2638 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = C6EFFF2F267C866C00DD2638 /* WireGuardKit */; };
@@ -277,7 +276,7 @@
 		7554E2C026D4B82A001355F7 /* AccountInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoModel.swift; sourceTree = "<group>"; };
 		7554E2C326D4BB03001355F7 /* DNSSettingsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNSSettingsRowView.swift; sourceTree = "<group>"; };
 		75568D7126E5C62100166E5F /* ConnectionModelError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionModelError.swift; sourceTree = "<group>"; };
-		755A4F2326C581F10057704C /* PlansCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlansCoordinator.swift; sourceTree = "<group>"; };
+		755A4F2326C581F10057704C /* NodeSubscriptionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionCoordinator.swift; sourceTree = "<group>"; };
 		755B3AA6274BE8DE009E2D75 /* PurchasesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchasesViewModel.swift; sourceTree = "<group>"; };
 		755B3AA7274BE8DE009E2D75 /* PurchasesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchasesModel.swift; sourceTree = "<group>"; };
 		755B3AA9274BE8DE009E2D75 /* PurchaseOptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseOptionView.swift; sourceTree = "<group>"; };
@@ -305,7 +304,6 @@
 		759DE5BC2715866C00DC7757 /* DNSSettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DNSSettingsViewModel.swift; sourceTree = "<group>"; };
 		759DE5BD2715866C00DC7757 /* DNSSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DNSSettingsView.swift; sourceTree = "<group>"; };
 		759DE5C327158B1E00DC7757 /* DNSServerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNSServerType.swift; sourceTree = "<group>"; };
-		75B0D55326CB9A85009ECAFC /* SelectedPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlan.swift; sourceTree = "<group>"; };
 		75B0D55B26CBB370009ECAFC /* UINavigationBar+Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Styles.swift"; sourceTree = "<group>"; };
 		75B0D55D26CBB633009ECAFC /* UIViewController+NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBar.swift"; sourceTree = "<group>"; };
 		75B0D55F26CD265E009ECAFC /* UserDefaultsStorageStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStorageStrategy.swift; sourceTree = "<group>"; };
@@ -394,9 +392,9 @@
 		C64B495A26B8B3F70004A692 /* ConnectionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionModel.swift; sourceTree = "<group>"; };
 		C64ED2F526C50CAE00222CA4 /* ContinentsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinentsViewModel.swift; sourceTree = "<group>"; };
 		C64ED2F926C50CAE00222CA4 /* ContinentsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinentsModel.swift; sourceTree = "<group>"; };
-		C64ED32426C57FE900222CA4 /* PlansView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlansView.swift; sourceTree = "<group>"; };
-		C64ED32526C57FE900222CA4 /* PlansViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlansViewModel.swift; sourceTree = "<group>"; };
-		C64ED32B26C57FE900222CA4 /* PlansModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlansModel.swift; sourceTree = "<group>"; };
+		C64ED32426C57FE900222CA4 /* NodeSubscriptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionView.swift; sourceTree = "<group>"; };
+		C64ED32526C57FE900222CA4 /* NodeSubscriptionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionViewModel.swift; sourceTree = "<group>"; };
+		C64ED32B26C57FE900222CA4 /* NodeSubscriptionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSubscriptionModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1096,7 +1094,7 @@
 				93FA0685270B340A0006A765 /* NodeDetails */,
 				753EDDF42715633A00DA76F8 /* NodeSelection */,
 				75D6563326C4CEB8000056B4 /* Onboarding */,
-				C64ED32326C57FE900222CA4 /* Plans */,
+				C64ED32326C57FE900222CA4 /* NodeSubscription */,
 				755B3AA5274BE8DE009E2D75 /* Purchases */,
 				7504EA6C267B4E6700023D42 /* Root */,
 				933FB9C1274B88DE0086A48D /* SubscribedNodes */,
@@ -1139,17 +1137,16 @@
 			path = Continents;
 			sourceTree = "<group>";
 		};
-		C64ED32326C57FE900222CA4 /* Plans */ = {
+		C64ED32326C57FE900222CA4 /* NodeSubscription */ = {
 			isa = PBXGroup;
 			children = (
 				C64ED32626C57FE900222CA4 /* Subviews */,
-				755A4F2326C581F10057704C /* PlansCoordinator.swift */,
-				C64ED32B26C57FE900222CA4 /* PlansModel.swift */,
-				C64ED32426C57FE900222CA4 /* PlansView.swift */,
-				C64ED32526C57FE900222CA4 /* PlansViewModel.swift */,
-				75B0D55326CB9A85009ECAFC /* SelectedPlan.swift */,
+				755A4F2326C581F10057704C /* NodeSubscriptionCoordinator.swift */,
+				C64ED32B26C57FE900222CA4 /* NodeSubscriptionModel.swift */,
+				C64ED32426C57FE900222CA4 /* NodeSubscriptionView.swift */,
+				C64ED32526C57FE900222CA4 /* NodeSubscriptionViewModel.swift */,
 			);
-			path = Plans;
+			path = NodeSubscription;
 			sourceTree = "<group>";
 		};
 		C64ED32626C57FE900222CA4 /* Subviews */ = {
@@ -1381,7 +1378,6 @@
 				7504EA8C267B71C800023D42 /* TunnelChanges.swift in Sources */,
 				757F0B7E26D8D6CE000C0865 /* Connectivity.swift in Sources */,
 				93DBF5432716A6B6006EBC65 /* StoresNodes.swift in Sources */,
-				75B0D55426CB9A85009ECAFC /* SelectedPlan.swift in Sources */,
 				93C3EC3B270AF19400B9CA4D /* GridView.swift in Sources */,
 				93FA0690270B4C5E0006A765 /* NodeInfoView.swift in Sources */,
 				93DBF570271888B8006EBC65 /* ContinentsRowViewType.swift in Sources */,
@@ -1389,8 +1385,8 @@
 				93785441270ECC810004483C /* AccentButton.swift in Sources */,
 				75D6561026BE8818000056B4 /* ActivityIndicator.swift in Sources */,
 				C64B495E26B8B3F70004A692 /* ConnectionModel.swift in Sources */,
-				C64ED32D26C57FE900222CA4 /* PlansViewModel.swift in Sources */,
-				C64ED33126C57FE900222CA4 /* PlansModel.swift in Sources */,
+				C64ED32D26C57FE900222CA4 /* NodeSubscriptionViewModel.swift in Sources */,
+				C64ED33126C57FE900222CA4 /* NodeSubscriptionModel.swift in Sources */,
 				C64ED2FE26C50CAE00222CA4 /* ContinentsModel.swift in Sources */,
 				7504EA79267B5B4600023D42 /* TunnelStatus.swift in Sources */,
 				75E5BE0226DE2FA400C345B9 /* View+Ext.swift in Sources */,
@@ -1424,7 +1420,7 @@
 				9344B7ED27057FB900321AAA /* Date+Ext.swift in Sources */,
 				93FB6F0B27495EE200819A6C /* ExtraCoordinator.swift in Sources */,
 				93FA068D270B34530006A765 /* NodeDetailsViewModel.swift in Sources */,
-				C64ED32C26C57FE900222CA4 /* PlansView.swift in Sources */,
+				C64ED32C26C57FE900222CA4 /* NodeSubscriptionView.swift in Sources */,
 				93FA0694270B4C770006A765 /* NodeInfoType.swift in Sources */,
 				759DE5C02715866C00DC7757 /* DNSSettingsViewModel.swift in Sources */,
 				7504EAAD267B9A1700023D42 /* NEVPNStatus+Ext.swift in Sources */,
@@ -1512,7 +1508,7 @@
 				7504E9CD267A183D00023D42 /* SceneDelegate.swift in Sources */,
 				759DE5BE2715866C00DC7757 /* DNSSettingsCoordinator.swift in Sources */,
 				C64B495D26B8B3F70004A692 /* CountryTileView.swift in Sources */,
-				755A4F2426C581F10057704C /* PlansCoordinator.swift in Sources */,
+				755A4F2426C581F10057704C /* NodeSubscriptionCoordinator.swift in Sources */,
 				7504EA4D267A390A00023D42 /* Keychain.swift in Sources */,
 				753EDDFF2715633A00DA76F8 /* NodeSelectionRowViewModel.swift in Sources */,
 				75E5BDFD26DCDBDA00C345B9 /* OnboardingStepModel.swift in Sources */,
