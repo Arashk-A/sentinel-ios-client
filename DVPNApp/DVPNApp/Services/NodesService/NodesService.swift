@@ -164,7 +164,11 @@ extension NodesService: NodesServiceType {
                     self._isLoadingSubscriptions = false
                     return
                 }
-                self.loadNodes(from: Set(subscriptions.map { $0.node }))
+                
+                let plans = subscriptions.filter { $0.plan != 0 }.map { $0.plan }
+                let addresses = Set(subscriptions.map { $0.node }.filter { !$0.isEmpty })
+                self.loadNodes(from: addresses)
+                plans.forEach { self.loadNodeInfo(for: $0)}
             }
         }
     }
@@ -233,7 +237,7 @@ extension NodesService {
         for sentinelNode: SentinelNode,
         completion: @escaping (Result<Node, Error>) -> Void
     ) {
-        self.sentinelService.fetchInfo(
+        sentinelService.fetchInfo(
             for: sentinelNode, timeout: constants.timeout
         ) { [weak self] result in
             guard let self = self else { return }
@@ -266,6 +270,19 @@ extension NodesService {
                 case .success(let node):
                     self._subscribedNodes.append(node)
                 }
+            }
+        }
+    }
+    
+    private func loadNodeInfo(for planID: UInt64) {
+        sentinelService.queryNodesForPlan(with: planID) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .failure(let error):
+                log.error(error)
+            case .success(let sentinelNodes):
+                self.loadNodes(from: Set(sentinelNodes.map { $0.address }))
             }
         }
     }
