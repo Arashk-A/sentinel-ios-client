@@ -316,7 +316,7 @@ internal enum L10n {
     internal enum AddTokens {
       /// Top-up your wallet?
       internal static let subtitle = L10n.tr("Localizable", "Plans.AddTokens.Subtitle")
-      /// Not enough tokens to subcribe
+      /// Not enough tokens to subscribe
       internal static let title = L10n.tr("Localizable", "Plans.AddTokens.Title")
     }
     internal enum Error {

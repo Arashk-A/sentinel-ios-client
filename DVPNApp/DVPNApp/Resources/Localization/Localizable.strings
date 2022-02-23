@@ -100,7 +100,7 @@
 "Plans.Subscribe" = "SUBSCRIBE";
 "Plans.Subscribe.Title" = "Subscribe to %@?";
 "Plans.Error.Payment.Failed" = "Your transaction was unsuccessful. Please try again.";
-"Plans.AddTokens.Title" = "Not enough tokens to subcribe";
+"Plans.AddTokens.Title" = "Not enough tokens to subscribe";
 "Plans.AddTokens.Subtitle" = "Top-up your wallet?";
 
 "Error.GRPCError.RPCTimedOut" = "Request timed-out. No internet connection.";
