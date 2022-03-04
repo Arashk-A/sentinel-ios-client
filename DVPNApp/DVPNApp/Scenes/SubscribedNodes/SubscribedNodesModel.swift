@@ -31,7 +31,6 @@ enum SubscribedNodesModelEvent {
     case update(locations: [SentinelNode])
     case set(subscribedNodes: [SentinelNode])
     case setSubscriptionsState(SubscriptionsState)
-    case reloadSubscriptions
 }
 
 final class SubscribedNodesModel {

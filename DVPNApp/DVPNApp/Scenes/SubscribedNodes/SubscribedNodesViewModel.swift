@@ -109,9 +109,6 @@ extension SubscribedNodesViewModel {
                     self?.set(subscribedNodes: subscribedNodes)
                 case let .setSubscriptionsState(state):
                     self?.subscriptionsState = state
-                case .reloadSubscriptions:
-                    self?.subscriptions = []
-                    self?.isLoadingSubscriptions = true
                 }
             }
             .store(in: &cancellables)
