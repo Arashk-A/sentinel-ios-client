@@ -24,6 +24,8 @@ enum SubscriptionsState {
 }
 
 enum SubscribedNodesModelEvent {
+    case error(Error)
+    
     case showLoadingSubscriptions(state: Bool)
     
     case update(locations: [SentinelNode])
@@ -85,5 +87,24 @@ extension SubscribedNodesModel {
                 self?.eventSubject.send(.setSubscriptionsState(.noConnection))
             }
         }
+    }
+}
+
+extension SubscribedNodesModel {
+    func cancelSubscriptions(for node: Node) {
+        let subscriptionsToCancel = subscriptions
+            .filter { $0.node == node.info.address }
+            .map { $0.id }
+        
+        context.sentinelService.cancel(
+            subscriptions: subscriptionsToCancel, node: node.info.address) { [weak self] result in
+                switch result {
+                case let .failure(error):
+                    log.error(error)
+                    self?.eventSubject.send(.error(error))
+                case .success:
+                    self?.loadSubscriptions()
+                }
+            }
     }
 }

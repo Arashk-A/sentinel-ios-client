@@ -378,6 +378,12 @@ internal enum L10n {
     internal static let notFound = L10n.tr("Localizable", "SubscribedNodes.NotFound")
     /// Subscribed nodes
     internal static let title = L10n.tr("Localizable", "SubscribedNodes.Title")
+    internal enum CancelSubscription {
+      /// Unsubscribe from %@?
+      internal static func title(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "SubscribedNodes.CancelSubscription.Title", String(describing: p1))
+      }
+    }
   }
 
   internal enum TabBar {
