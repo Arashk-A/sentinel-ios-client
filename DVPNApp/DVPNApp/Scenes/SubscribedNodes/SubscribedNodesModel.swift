@@ -78,7 +78,7 @@ extension SubscribedNodesModel {
     }
     
     func loadSubscriptions() {
-        context.nodesService.loadSubscriptions { [weak self] result in
+        context.nodesService.loadActiveSubscriptions { [weak self] result in
             switch result {
             case let .success(subscriptions):
                 self?.subscriptions = subscriptions

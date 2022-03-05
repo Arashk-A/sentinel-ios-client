@@ -86,9 +86,7 @@ extension SubscribedNodesViewModel {
         if let index = offsets.first {
             let node = subscriptions[index].node
             
-            showCancelSubscriptionAlert(node: node) { [weak self] in
-                self?.model.cancelSubscriptions(for: node)
-            }
+            showCancelSubscriptionAlert(node: node)
         }
     }
 }
@@ -133,9 +131,11 @@ extension SubscribedNodesViewModel {
         }
     }
     
-    private func showCancelSubscriptionAlert(node: Node, completion: @escaping () -> Void) {
+    private func showCancelSubscriptionAlert(node: Node) {
         let completion = { [weak self] in
             guard let self = self else { return }
+            
+            self.isLoadingSubscriptions = true
             
             self.model.cancelSubscriptions(for: node)
         }
