@@ -85,6 +85,11 @@ extension SubscribedNodesModel {
             .map { .set(subscribedNodes: $0) }
             .subscribe(eventSubject)
             .store(in: &cancellables)
+        
+        context.nodesService.subscriptions
+            .sink(receiveValue: { [weak self] subscriptions in
+                self?.subscriptions = subscriptions
+            }).store(in: &cancellables)
     }
     
     func setNodes() {
@@ -94,8 +99,8 @@ extension SubscribedNodesModel {
     func loadSubscriptions() {
         context.nodesService.loadActiveSubscriptions { [weak self] result in
             switch result {
-            case let .success(subscriptions):
-                self?.subscriptions = subscriptions
+            case .success:
+                return
             case .failure:
                 self?.eventSubject.send(.setSubscriptionsState(.noConnection))
             }
