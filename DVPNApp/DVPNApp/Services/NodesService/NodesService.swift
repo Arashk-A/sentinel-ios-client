@@ -164,6 +164,7 @@ extension NodesService: NodesServiceType {
                     self._isLoadingSubscriptions = false
                     return
                 }
+                
                 self.loadNodes(from: Set(subscriptions.map { $0.node }))
             }
         }
@@ -251,6 +252,8 @@ extension NodesService {
     
     /// Use for loading nodes from subscriptions
     private func loadNodes(from addresses: Set<String>) {
+        self._subscribedNodes = []
+        
         addresses.enumerated().forEach { index, address in
             sentinelService.queryNodeStatus(
                 address: address,

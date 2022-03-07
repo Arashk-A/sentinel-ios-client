@@ -44,6 +44,8 @@ extension SubscribedNodesCoordinator: RouterType {
                 for: navigation,
                    configuration: .init(node: node, isSubscribed: isSubscribed)
             )
+        case let .info(message):
+            show(message: message, theme: .success)
         }
     }
 }

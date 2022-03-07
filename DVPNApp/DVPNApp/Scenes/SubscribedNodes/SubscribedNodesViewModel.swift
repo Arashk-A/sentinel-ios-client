@@ -31,6 +31,7 @@ final class SubscribedNodesViewModel: ObservableObject {
     enum Route {
         case error(Error)
         case details(SentinelNode, isSubscribed: Bool)
+        case info(String)
     }
     
     @Published private(set) var subscriptions: [NodeSelectionRowViewModel] = []
@@ -105,8 +106,12 @@ extension SubscribedNodesViewModel {
                     self?.isLoadingSubscriptions = state
                 case let .set(subscribedNodes):
                     self?.set(subscribedNodes: subscribedNodes)
+                case .resetSubscribedNodes:
+                    self?.resetSubscribedNodes()
                 case let .setSubscriptionsState(state):
                     self?.subscriptionsState = state
+                case let .info(message):
+                    self?.router.play(event: .info(message))
                 }
             }
             .store(in: &cancellables)
@@ -129,6 +134,11 @@ extension SubscribedNodesViewModel {
                 subscriptions.append(model)
             }
         }
+    }
+    
+    private func resetSubscribedNodes() {
+        subscriptions = []
+        nodes = []
     }
     
     private func showCancelSubscriptionAlert(node: Node) {

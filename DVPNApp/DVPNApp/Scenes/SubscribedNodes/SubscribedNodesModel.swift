@@ -23,6 +23,17 @@ enum SubscriptionsState {
     }
 }
 
+enum SubscribedNodesModelError: LocalizedError {
+    case faliToCancelSubscription
+
+    var errorDescription: String? {
+        switch self {
+        case .faliToCancelSubscription:
+            return L10n.SubscribedNodes.Error.subscriptionCancellationFailed
+        }
+    }
+}
+
 enum SubscribedNodesModelEvent {
     case error(Error)
     
@@ -30,7 +41,10 @@ enum SubscribedNodesModelEvent {
     
     case update(locations: [SentinelNode])
     case set(subscribedNodes: [SentinelNode])
+    case resetSubscribedNodes
     case setSubscriptionsState(SubscriptionsState)
+    
+    case info(String)
 }
 
 final class SubscribedNodesModel {
@@ -99,11 +113,32 @@ extension SubscribedNodesModel {
             subscriptions: subscriptionsToCancel, node: node.info.address) { [weak self] result in
                 switch result {
                 case let .failure(error):
-                    log.error(error)
-                    self?.eventSubject.send(.error(error))
-                case .success:
-                    self?.loadSubscriptions()
+                    self?.handleCancellationFailure(with: error)
+                case let .success(result):
+                    switch result.isSuccess {
+                    case true:
+                        self?.handleCancellation(node: node)
+                    case false:
+                        self?.handleCancellationFailure(with: SubscribedNodesModelError.faliToCancelSubscription)
+                    }
                 }
             }
+    }
+}
+
+// MARK: - Private
+ 
+extension SubscribedNodesModel {
+    private func handleCancellation(node: Node) {
+        eventSubject.send(.resetSubscribedNodes)
+        eventSubject.send(.info(L10n.SubscribedNodes.subscriptionCanceled(node.info.moniker)))
+
+        loadSubscriptions()
+    }
+    
+    private func handleCancellationFailure(with error: Error) {
+        log.error(error)
+        eventSubject.send(.error(error))
+        eventSubject.send(.showLoadingSubscriptions(state: false))
     }
 }
