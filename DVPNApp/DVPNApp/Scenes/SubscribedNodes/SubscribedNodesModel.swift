@@ -111,6 +111,8 @@ extension SubscribedNodesModel {
         
         context.sentinelService.cancel(
             subscriptions: subscriptionsToCancel, node: node.info.address) { [weak self] result in
+                log.debug(result)
+
                 switch result {
                 case let .failure(error):
                     self?.handleCancellationFailure(with: error)
