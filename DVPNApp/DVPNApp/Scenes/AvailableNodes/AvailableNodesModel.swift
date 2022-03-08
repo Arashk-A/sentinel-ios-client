@@ -69,12 +69,6 @@ extension AvailableNodesModel {
             .store(in: &cancellables)
     }
 
-    func save(nodeAddress: String) {
-        context.connectionInfoStorage.set(lastSelectedNode: nodeAddress)
-        context.connectionInfoStorage.set(shouldConnect: true)
-        eventSubject.send(.connect)
-    }
-
     func isSubscribed(to node: String) -> Bool {
         subscriptions.contains(where: { $0.node == node })
     }
