@@ -116,7 +116,7 @@ extension NodeSubscriptionModel {
                     return
                 }
                 
-                self.context.nodesService.loadSubscriptions(completion: { _ in })
+                self.context.nodesService.loadActiveSubscriptions(completion: { _ in })
                 self.context.connectionInfoStorage.set(lastSelectedNode: self.node.address)
                 self.context.connectionInfoStorage.set(shouldConnect: true)
                 self.eventSubject.send(.processPayment(.success(response)))
