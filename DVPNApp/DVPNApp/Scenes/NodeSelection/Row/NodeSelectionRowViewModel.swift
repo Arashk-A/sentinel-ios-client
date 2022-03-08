@@ -10,18 +10,22 @@ struct NodeSelectionRowViewModel: Hashable, Identifiable {
     
     let latency: Int
     
+    let node: Node
+    
     init(
         id: String,
         icon: UIImage,
         title: String,
         subtitle: String,
-        latency: Int
+        latency: Int,
+        node: Node
     ) {
         self.id = id
         self.icon = icon
         self.title = title
         self.subtitle = subtitle
         self.latency = latency
+        self.node = node
     }
 
     init(from node: Node, icon: UIImage) {
@@ -30,7 +34,8 @@ struct NodeSelectionRowViewModel: Hashable, Identifiable {
             icon: icon,
             title: node.info.moniker,
             subtitle: String(node.info.address.suffix(6)),
-            latency: Int((node.latency.truncatingRemainder(dividingBy: 1)) * 1000)
+            latency: Int((node.latency.truncatingRemainder(dividingBy: 1)) * 1000),
+            node: node
         )
     }
 }

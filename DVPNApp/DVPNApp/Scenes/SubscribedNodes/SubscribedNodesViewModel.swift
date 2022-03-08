@@ -11,6 +11,7 @@ import SentinelWallet
 import Combine
 import UIKit.UIImage
 import NetworkExtension
+import SwiftUI
 
 enum SubscribedNodesViewModelError: LocalizedError {
     case unavailableNode
@@ -30,6 +31,7 @@ final class SubscribedNodesViewModel: ObservableObject {
     enum Route {
         case error(Error)
         case details(SentinelNode, isSubscribed: Bool)
+        case info(String)
     }
     
     @Published private(set) var subscriptions: [NodeSelectionRowViewModel] = []
@@ -43,6 +45,11 @@ final class SubscribedNodesViewModel: ObservableObject {
     private var statusObservationToken: NotificationToken?
     
     @Published private(set) var subscriptionsState: SubscriptionsState = .empty
+    
+    @Published var alertContent: (isShown: Bool, alert: Alert) = (
+        false,
+        Alert(title: Text(""), message: nil, dismissButton: nil)
+    )
 
     init(model: SubscribedNodesModel, router: Router) {
         self.model = model
@@ -75,6 +82,14 @@ extension SubscribedNodesViewModel {
         
         router.play(event: .details(sentinelNode, isSubscribed: true))
     }
+    
+    func delete(at offsets: IndexSet) {
+        if let index = offsets.first {
+            let node = subscriptions[index].node
+            
+            showCancelSubscriptionAlert(node: node)
+        }
+    }
 }
 
 extension SubscribedNodesViewModel {
@@ -83,17 +98,20 @@ extension SubscribedNodesViewModel {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] event in
                 switch event {
+                case let .error(error):
+                    self?.router.play(event: .error(error))
                 case let .update(nodes):
                     self?.nodes.formUnion(nodes)
                 case let .showLoadingSubscriptions(state):
                     self?.isLoadingSubscriptions = state
                 case let .set(subscribedNodes):
                     self?.set(subscribedNodes: subscribedNodes)
+                case .resetSubscribedNodes:
+                    self?.resetSubscribedNodes()
                 case let .setSubscriptionsState(state):
                     self?.subscriptionsState = state
-                case .reloadSubscriptions:
-                    self?.subscriptions = []
-                    self?.isLoadingSubscriptions = true
+                case let .info(message):
+                    self?.router.play(event: .info(message))
                 }
             }
             .store(in: &cancellables)
@@ -116,5 +134,35 @@ extension SubscribedNodesViewModel {
                 subscriptions.append(model)
             }
         }
+    }
+    
+    private func resetSubscribedNodes() {
+        subscriptions = []
+        nodes = []
+    }
+    
+    private func showCancelSubscriptionAlert(node: Node) {
+        let completion = { [weak self] in
+            guard let self = self else { return }
+            
+            self.isLoadingSubscriptions = true
+            
+            self.model.cancelSubscriptions(for: node)
+        }
+        
+        alertContent = (
+            true,
+            Alert(
+                title: Text( L10n.SubscribedNodes.CancelSubscription.title(node.info.moniker)),
+                primaryButton: .default(
+                    Text(L10n.Common.yes),
+                    action: completion
+                ),
+                secondaryButton: .destructive(
+                    Text(L10n.Common.cancel),
+                    action: {}
+                )
+            )
+        )
     }
 }
