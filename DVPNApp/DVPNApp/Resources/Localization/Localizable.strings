@@ -82,6 +82,9 @@
 "SubscribedNodes.Title" = "Subscribed nodes";
 "SubscribedNodes.NotFound" = "You are not subscribed to any nodes";
 "SubscribedNodes.NoConnection" = "Failed to load nodes";
+"SubscribedNodes.CancelSubscription.Title" = "Unsubscribe from %@?";
+"SubscribedNodes.SubscriptionCanceled" = "Successfully unsubscribed from %@";
+"SubscribedNodes.Error.SubscriptionCancellationFailed" = "Subscription cancellation failed";
 
 "NodeDetails.Title" = "Details";
 "NodeDetails.Connect" = "CONNECT NOW";

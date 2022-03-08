@@ -71,7 +71,11 @@ extension SubscribedNodesView {
                     }
                 )
                 .listRowBackground(Color.clear)
+                .alert(isPresented: $viewModel.alertContent.isShown) {
+                    viewModel.alertContent.alert
+                }
             }
+            .onDelete(perform: viewModel.delete)
         }
         .listStyle(PlainListStyle())
     }

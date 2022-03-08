@@ -23,13 +23,28 @@ enum SubscriptionsState {
     }
 }
 
+enum SubscribedNodesModelError: LocalizedError {
+    case faliToCancelSubscription
+
+    var errorDescription: String? {
+        switch self {
+        case .faliToCancelSubscription:
+            return L10n.SubscribedNodes.Error.subscriptionCancellationFailed
+        }
+    }
+}
+
 enum SubscribedNodesModelEvent {
+    case error(Error)
+    
     case showLoadingSubscriptions(state: Bool)
     
     case update(locations: [SentinelNode])
     case set(subscribedNodes: [SentinelNode])
+    case resetSubscribedNodes
     case setSubscriptionsState(SubscriptionsState)
-    case reloadSubscriptions
+    
+    case info(String)
 }
 
 final class SubscribedNodesModel {
@@ -70,6 +85,11 @@ extension SubscribedNodesModel {
             .map { .set(subscribedNodes: $0) }
             .subscribe(eventSubject)
             .store(in: &cancellables)
+        
+        context.nodesService.subscriptions
+            .sink(receiveValue: { [weak self] subscriptions in
+                self?.subscriptions = subscriptions
+            }).store(in: &cancellables)
     }
     
     func setNodes() {
@@ -77,13 +97,55 @@ extension SubscribedNodesModel {
     }
     
     func loadSubscriptions() {
-        context.nodesService.loadSubscriptions { [weak self] result in
+        context.nodesService.loadActiveSubscriptions { [weak self] result in
             switch result {
-            case let .success(subscriptions):
-                self?.subscriptions = subscriptions
+            case .success:
+                return
             case .failure:
                 self?.eventSubject.send(.setSubscriptionsState(.noConnection))
             }
         }
+    }
+}
+
+extension SubscribedNodesModel {
+    func cancelSubscriptions(for node: Node) {
+        let subscriptionsToCancel = subscriptions
+            .filter { $0.node == node.info.address }
+            .map { $0.id }
+        
+        context.sentinelService.cancel(
+            subscriptions: subscriptionsToCancel, node: node.info.address) { [weak self] result in
+                log.debug(result)
+
+                switch result {
+                case let .failure(error):
+                    self?.handleCancellationFailure(with: error)
+                case let .success(result):
+                    switch result.isSuccess {
+                    case true:
+                        self?.handleCancellation(node: node)
+                    case false:
+                        self?.handleCancellationFailure(with: SubscribedNodesModelError.faliToCancelSubscription)
+                    }
+                }
+            }
+    }
+}
+
+// MARK: - Private
+ 
+extension SubscribedNodesModel {
+    private func handleCancellation(node: Node) {
+        eventSubject.send(.resetSubscribedNodes)
+        eventSubject.send(.info(L10n.SubscribedNodes.subscriptionCanceled(node.info.moniker)))
+
+        loadSubscriptions()
+    }
+    
+    private func handleCancellationFailure(with error: Error) {
+        log.error(error)
+        eventSubject.send(.error(error))
+        eventSubject.send(.showLoadingSubscriptions(state: false))
     }
 }

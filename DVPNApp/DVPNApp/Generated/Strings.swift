@@ -376,8 +376,22 @@ internal enum L10n {
     internal static let noConnection = L10n.tr("Localizable", "SubscribedNodes.NoConnection")
     /// You are not subscribed to any nodes
     internal static let notFound = L10n.tr("Localizable", "SubscribedNodes.NotFound")
+    /// Successfully unsubscribed from %@
+    internal static func subscriptionCanceled(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "SubscribedNodes.SubscriptionCanceled", String(describing: p1))
+    }
     /// Subscribed nodes
     internal static let title = L10n.tr("Localizable", "SubscribedNodes.Title")
+    internal enum CancelSubscription {
+      /// Unsubscribe from %@?
+      internal static func title(_ p1: Any) -> String {
+        return L10n.tr("Localizable", "SubscribedNodes.CancelSubscription.Title", String(describing: p1))
+      }
+    }
+    internal enum Error {
+      /// Subscription cancellation failed
+      internal static let subscriptionCancellationFailed = L10n.tr("Localizable", "SubscribedNodes.Error.SubscriptionCancellationFailed")
+    }
   }
 
   internal enum TabBar {

@@ -49,20 +49,20 @@ struct NodeSelectionRowView: View {
 
 // swiftlint:disable force_unwrapping
 
-struct HomeRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        NodeSelectionRowView(
-            viewModel:
-                    .init(
-                        id: "id",
-                        icon: Flag(countryCode: "EE")!.image(style: .roundedRect),
-                        title: "Test",
-                        subtitle: "mfq9rph",
-                        latency: 3
-                    ),
-            openDetails: {}
-        )
-    }
-}
+//struct HomeRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NodeSelectionRowView(
+//            viewModel:
+//                    .init(
+//                        id: "id",
+//                        icon: Flag(countryCode: "EE")!.image(style: .roundedRect),
+//                        title: "Test",
+//                        subtitle: "mfq9rph",
+//                        latency: 3
+//                    ),
+//            openDetails: {}
+//        )
+//    }
+//}
 
 // swiftlint:enable force_unwrapping
