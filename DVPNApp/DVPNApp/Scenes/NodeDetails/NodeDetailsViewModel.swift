@@ -46,7 +46,7 @@ final class NodeDetailsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        model.refresh()
+        model.setNode()
     }
 }
 

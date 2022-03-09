@@ -12,6 +12,10 @@ protocol StoresConnectInfo {
     func shouldConnect() -> Bool
     func set(lastSelectedNode: String)
     func lastSelectedNode() -> String?
+    
+    func set(lastSelectedPlanId: UInt64?)
+    func lastSelectedPlanId() -> UInt64?
+    
     func set(sessionId: Int?)
     func lastSessionId() -> Int?
     func set(sessionStart: Date?)

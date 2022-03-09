@@ -45,6 +45,9 @@ final class ConnectionModel {
         eventSubject.eraseToAnyPublisher()
     }
     
+    private var lastSelectedNodeAddress: String?
+    private var lastSelectedPlandId: UInt64?
+    
     private var selectedNode: DVPNNodeInfo?
 
     init(context: Context) {
@@ -91,6 +94,9 @@ extension ConnectionModel {
               context.connectionInfoStorage.shouldConnect() else {
             return
         }
+        
+        lastSelectedNodeAddress = context.connectionInfoStorage.lastSelectedNode()
+        lastSelectedPlandId = context.connectionInfoStorage.lastSelectedPlanId()
         
         context.connectionInfoStorage.set(shouldConnect: false)
 
@@ -172,13 +178,30 @@ extension ConnectionModel {
                 self.show(error: error)
 
             case .success(let subscriptions):
-                guard let selectedAddress = selectedAddress,
-                      let subscription = subscriptions.last(where: { $0.node == selectedAddress }) else {
+                guard let selectedAddress = selectedAddress else {
+                    // connect to last user subscription
                     self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
                     self.handleConnection(reconnect: reconnect)
                     return
                 }
-
+                
+                guard let planId = self.lastSelectedPlandId,
+                      let subscription = subscriptions.last(where: { $0.plan == planId }) else {
+                          
+                          guard let subscription = subscriptions.last(where: { $0.node == selectedAddress }) else {
+                              // connect to last user subscription
+                              self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
+                              self.handleConnection(reconnect: reconnect)
+                              return
+                          }
+                          
+                          // connect to node
+                          self.subscription = subscription
+                          self.handleConnection(reconnect: reconnect)
+                          return
+                      }
+                
+                // connect to plan
                 self.subscription = subscription
                 self.handleConnection(reconnect: reconnect)
             }
@@ -239,8 +262,13 @@ extension ConnectionModel {
                     return
                 }
                 self.eventSubject.send(.updateConnection(status: .nodeStatus))
+                
+                guard let nodeAddress = self.lastSelectedNodeAddress else {
+                    return
+                }
+                
                 self.context.sentinelService.queryNodeStatus(
-                    address: subscription.node,
+                    address: nodeAddress,
                     timeout: constants.timeout
                 ) { [weak self] result in
                     switch result {
@@ -325,7 +353,12 @@ extension ConnectionModel {
 
     private func startSession(on subscription: SentinelWallet.Subscription, nodeURL: String) {
         eventSubject.send(.updateConnection(status: .sessionBroadcast))
-        context.sentinelService.startNewSession(on: subscription) { [weak self] result in
+        
+        guard let nodeAddress = lastSelectedNodeAddress else {
+            return
+        }
+        
+        context.sentinelService.startNewSession(on: subscription, nodeAddress: nodeAddress) { [weak self] result in
             switch result {
             case .failure(let error):
                 self?.set(sessionStart: nil)
