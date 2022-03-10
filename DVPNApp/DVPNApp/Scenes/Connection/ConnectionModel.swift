@@ -231,6 +231,18 @@ extension ConnectionModel {
     ) {
         // connect to last user subscription
         self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
+        
+        guard let subscription = subscription else {
+            show(error: ConnectionModelError.emptySubscriptions)
+            return
+        }
+        
+        if subscription.plan != 0 {
+            #warning("TODO: set subscriptionType")
+        } else {
+            self.subscriptionType = .node(subscription.node)
+        }
+        
         self.handleConnection(reconnect: reconnect)
     }
 

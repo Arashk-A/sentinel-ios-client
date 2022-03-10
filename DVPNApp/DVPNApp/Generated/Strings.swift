@@ -113,6 +113,8 @@ internal enum L10n {
       internal static let disconnect = L10n.tr("Localizable", "Connection.Button.Disconnect")
     }
     internal enum Error {
+      /// You do not have any subscriptions
+      internal static let emptySubscriptions = L10n.tr("Localizable", "Connection.Error.EmptySubscriptions")
       /// Misconfigured nodes. Please, try again or select another node
       internal static let invalidURL = L10n.tr("Localizable", "Connection.Error.InvalidURL")
       /// Not enough points to broadcast - you'll need at least 0.01 points on your account. Please, check your balance and try again later
