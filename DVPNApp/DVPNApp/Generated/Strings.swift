@@ -389,6 +389,8 @@ internal enum L10n {
       }
     }
     internal enum Error {
+      /// It seems the subscription is new, it can not be cancelled. Please, try again later
+      internal static let newSubscription = L10n.tr("Localizable", "SubscribedNodes.Error.NewSubscription")
       /// Subscription cancellation failed
       internal static let subscriptionCancellationFailed = L10n.tr("Localizable", "SubscribedNodes.Error.SubscriptionCancellationFailed")
     }
