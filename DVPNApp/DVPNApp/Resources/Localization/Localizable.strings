@@ -6,6 +6,7 @@
 
 "TabBar.Item.Continents" = "All nodes";
 "TabBar.Item.SubscribedNodes" = "Subscribed";
+"TabBar.Item.Plans" = "Plans";
 "TabBar.Item.Account" = "My Account";
 "TabBar.Item.Extra" = "Extras";
 
@@ -143,3 +144,5 @@
 "Purchases.Button.Buy" = "Buy now";
 "Purchases.Warning.Cancelled" = "Purchase was canceled.";
 "Purchases.Info.Completed" = "Purchase is succefully made.";
+
+"Plans.Title" = "Plans";
