@@ -270,8 +270,8 @@ extension ConnectionModel {
                 self.stopLoading()
             }
         }
-
-        updateLocation(address: subscriptionInfo.node)
+        
+        updateLocation()
     }
 
     private func connect(to subscription: SentinelWallet.Subscription) {
@@ -325,7 +325,13 @@ extension ConnectionModel {
         return checkQuotaAndSubscription(hasQuota: bandwidthLeft != 0)
     }
 
-    private func updateLocation(address: String) {
+    private func updateLocation() {
+        guard let subscriptionType = self.subscriptionType else {
+            return
+        }
+        
+        let address = subscriptionType.nodeAddress
+        
         context.sentinelService.queryNodeStatus(address: address, timeout: constants.timeout) { [weak self] response in
             switch response {
             case .failure(let error):
@@ -441,7 +447,7 @@ extension ConnectionModel {
                     }
                 case (true, false), (false, false):
                     self.connect(to: subscription)
-                    self.updateLocation(address: subscription.node)
+                    self.updateLocation()
                 }
             }
         }
