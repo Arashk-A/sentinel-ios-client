@@ -34,7 +34,8 @@ struct PurchaseOptionView: View {
                             .padding(.bottom, 2)
                     }
 
-                    Text(model.price) .applyTextStyle(.whiteMain(ofSize: 18, weight: .bold))
+                    Text(model.price)
+                        .applyTextStyle(.whiteMain(ofSize: 18, weight: .bold))
                 }
                 Spacer()
             }
