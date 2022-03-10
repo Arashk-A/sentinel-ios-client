@@ -25,7 +25,8 @@ enum ConnectionModelEvent {
     
     /// When the quota is over
     case openSubscription(for: DVPNNodeInfo)
-    case resubscribe(to: DVPNNodeInfo)
+    case resubscribeToNode(DVPNNodeInfo)
+    case resubscribeToPlan(nodeAddress: String, planId: UInt64)
 }
 
 enum SubscriptionType {
@@ -395,15 +396,15 @@ extension ConnectionModel {
                 switch subscriptionType {
                 case .node:
                     if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
-                        self.eventSubject.send(.resubscribe(selectedNode))
+                        self.eventSubject.send(.resubscribeToNode(selectedNode))
                         self.stopLoading()
                         return
                     }
                     
                     self.show(error: error)
                 case let .plan((nodeAddress, planId)):
-                    // TODO: resubscribe to plan
-                    return
+                    // TODO: handle more cases
+                    self.eventSubject.send(.resubscribeToPlan(nodeAddress: nodeAddress, planId: planId))
                 }
             case .success(let id):
                 self.set(sessionStart: Date())
