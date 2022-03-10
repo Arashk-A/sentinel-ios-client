@@ -28,6 +28,20 @@ enum ConnectionModelEvent {
     case resubscribe(to: DVPNNodeInfo)
 }
 
+enum SubscriptionType {
+    case node(String)
+    case plan((nodeAddress: String, planId: UInt64))
+    
+    var nodeAddress: String {
+        switch self {
+        case let .node(nodeAddress):
+            return nodeAddress
+        case let .plan((nodeAddress, _)):
+            return nodeAddress
+        }
+    }
+}
+
 final class ConnectionModel {
     typealias Context = HasSentinelService & HasWalletService & HasConnectionInfoStorage & HasTunnelManager
         & HasNetworkService & HasNodesService
@@ -45,8 +59,7 @@ final class ConnectionModel {
         eventSubject.eraseToAnyPublisher()
     }
     
-    private var lastSelectedNodeAddress: String?
-    private var lastSelectedPlandId: UInt64?
+    private var subscriptionType: SubscriptionType? = nil
     
     private var selectedNode: DVPNNodeInfo?
 
@@ -90,19 +103,25 @@ extension ConnectionModel {
     
     /// Should be called each time when the view appears
     func checkNodeForUpdate() {
-        guard let address = context.connectionInfoStorage.lastSelectedNode(),
+        guard let lastSelectedNodeAddress = context.connectionInfoStorage.lastSelectedNode(),
               context.connectionInfoStorage.shouldConnect() else {
             return
         }
         
-        lastSelectedNodeAddress = context.connectionInfoStorage.lastSelectedNode()
-        lastSelectedPlandId = context.connectionInfoStorage.lastSelectedPlanId()
+        if let lastSelectedPlandId = context.connectionInfoStorage.lastSelectedPlanId() {
+            self.subscriptionType = .plan((nodeAddress: lastSelectedNodeAddress, planId: lastSelectedPlandId))
+        } else {
+            self.subscriptionType = .node(lastSelectedNodeAddress)
+        }
         
         context.connectionInfoStorage.set(shouldConnect: false)
 
         eventSubject.send(.setButton(isLoading: true))
 
-        context.sentinelService.queryNodeStatus(address: address, timeout: constants.timeout) { [weak self] response in
+        context.sentinelService.queryNodeStatus(
+            address: lastSelectedNodeAddress,
+            timeout: constants.timeout
+        ) { [weak self] response in
             guard let self = self else { return }
             
             switch response {
@@ -110,14 +129,14 @@ extension ConnectionModel {
                 log.error(error)
                 self.show(error: ConnectionModelError.nodeIsOffline)
             case .success(let sentinelNode):
-                guard let node = sentinelNode.node else {
+                guard let _ = sentinelNode.node else {
                     log.error("Loaded sentinelNode do not contain node")
                     return
                 }
                 
                 self.eventSubject.send(.setButton(isLoading: true))
-                self.loadSubscriptions(selectedAddress: node.info.address, reconnect: true)
-                self.context.connectionInfoStorage.set(lastSelectedNode: node.info.address)
+                self.loadSubscriptions(reconnect: true)
+                self.context.connectionInfoStorage.set(lastSelectedNode: lastSelectedNodeAddress)
             }
         }
     }
@@ -167,10 +186,10 @@ extension ConnectionModel {
     private func refreshSubscriptions() {
         eventSubject.send(.setButton(isLoading: true))
 
-        loadSubscriptions(selectedAddress: context.connectionInfoStorage.lastSelectedNode())
+        loadSubscriptions()
     }
 
-    private func loadSubscriptions(selectedAddress: String? = nil, reconnect: Bool = false) {
+    private func loadSubscriptions(reconnect: Bool = false) {
         context.sentinelService.fetchSubscriptions { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -178,34 +197,40 @@ extension ConnectionModel {
                 self.show(error: error)
 
             case .success(let subscriptions):
-                guard let selectedAddress = selectedAddress else {
-                    // connect to last user subscription
-                    self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
-                    self.handleConnection(reconnect: reconnect)
+                guard let subscriptionType = self.subscriptionType else {
+                    self.connectToLastSubscription(from: subscriptions, reconnect: reconnect)
                     return
                 }
                 
-                guard let planId = self.lastSelectedPlandId,
-                      let subscription = subscriptions.last(where: { $0.plan == planId }) else {
-                          
-                          guard let subscription = subscriptions.last(where: { $0.node == selectedAddress }) else {
-                              // connect to last user subscription
-                              self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
-                              self.handleConnection(reconnect: reconnect)
-                              return
-                          }
-                          
-                          // connect to node
-                          self.subscription = subscription
-                          self.handleConnection(reconnect: reconnect)
-                          return
-                      }
-                
-                // connect to plan
-                self.subscription = subscription
-                self.handleConnection(reconnect: reconnect)
+                switch subscriptionType {
+                case let .node(nodeAddress):
+                    guard let subscription = subscriptions.last(where: { $0.node == nodeAddress }) else {
+                        self.connectToLastSubscription(from: subscriptions, reconnect: reconnect)
+                        return
+                    }
+                    // connect to node
+                    self.subscription = subscription
+                    self.handleConnection(reconnect: reconnect)
+                case let .plan((_, planId)):
+                    guard let subscription = subscriptions.last(where: { $0.plan == planId }) else {
+                        self.connectToLastSubscription(from: subscriptions, reconnect: reconnect)
+                        return
+                    }
+                    // connect to plan
+                    self.subscription = subscription
+                    self.handleConnection(reconnect: reconnect)
+                }
             }
         }
+    }
+    
+    private func connectToLastSubscription(
+        from subscriptions: [SentinelWallet.Subscription],
+        reconnect: Bool
+    ) {
+        // connect to last user subscription
+        self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
+        self.handleConnection(reconnect: reconnect)
     }
 
     private func handleConnection(reconnect: Bool) {
@@ -263,7 +288,7 @@ extension ConnectionModel {
                 }
                 self.eventSubject.send(.updateConnection(status: .nodeStatus))
                 
-                guard let nodeAddress = self.lastSelectedNodeAddress else {
+                guard let nodeAddress = self.subscriptionType?.nodeAddress else {
                     return
                 }
                 
@@ -354,26 +379,35 @@ extension ConnectionModel {
     private func startSession(on subscription: SentinelWallet.Subscription, nodeURL: String) {
         eventSubject.send(.updateConnection(status: .sessionBroadcast))
         
-        guard let nodeAddress = lastSelectedNodeAddress else {
+        guard let nodeAddress = self.subscriptionType?.nodeAddress else {
             return
         }
         
-        context.sentinelService.startNewSession(on: subscription, nodeAddress: nodeAddress) { [weak self] result in
+        context.sentinelService.startNewSession(on: subscription.id, nodeAddress: nodeAddress) { [weak self] result in
+            guard let self = self, let subscriptionType = self.subscriptionType else { return }
+            
             switch result {
             case .failure(let error):
-                self?.set(sessionStart: nil)
-
-                if error.asAFError?.responseCode == 400, let selectedNode = self?.selectedNode {
-                    self?.eventSubject.send(.resubscribe(to: selectedNode))
-                    self?.stopLoading()
+                self.set(sessionStart: nil)
+                
+                log.debug(error)
+                
+                switch subscriptionType {
+                case .node:
+                    if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
+                        self.eventSubject.send(.resubscribe(selectedNode))
+                        self.stopLoading()
+                        return
+                    }
+                    
+                    self.show(error: error)
+                case let .plan((nodeAddress, planId)):
+                    // TODO: resubscribe to plan
                     return
                 }
-
-                self?.show(error: error)
-
             case .success(let id):
-                self?.set(sessionStart: Date())
-                self?.fetchConnectionData(remoteURLString: nodeURL, id: id)
+                self.set(sessionStart: Date())
+                self.fetchConnectionData(remoteURLString: nodeURL, id: id)
             }
         }
     }
