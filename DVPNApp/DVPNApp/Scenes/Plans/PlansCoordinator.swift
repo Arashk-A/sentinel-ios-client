@@ -35,9 +35,12 @@ final class PlansCoordinator: CoordinatorType {
 
 extension PlansCoordinator: RouterType {
     func play(event: PlansViewModel.Route) {
+        guard let navigation = navigation else { return }
         switch event {
-        case .error(let error):
+        case let .error(error):
             show(message: error.localizedDescription)
+        case let .open(plan, isSubscribed):
+            ModulesFactory.shared.makePlanNodesModule(plan: plan, isSubscribed: isSubscribed, for: navigation)
         }
     }
 }

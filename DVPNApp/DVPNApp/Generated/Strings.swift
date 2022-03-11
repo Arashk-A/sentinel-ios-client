@@ -312,6 +312,8 @@ internal enum L10n {
   }
 
   internal enum Plans {
+    /// No plans are available at the moment
+    internal static let empty = L10n.tr("Localizable", "Plans.Empty")
     /// SUBSCRIBE
     internal static let subscribe = L10n.tr("Localizable", "Plans.Subscribe")
     /// Plans
@@ -326,6 +328,28 @@ internal enum L10n {
       internal enum Payment {
         /// Your transaction was unsuccessful. Please try again.
         internal static let failed = L10n.tr("Localizable", "Plans.Error.Payment.Failed")
+      }
+    }
+    internal enum Info {
+      /// You are now subscribed to this plan!
+      internal static let subscribed = L10n.tr("Localizable", "Plans.Info.Subscribed")
+      /// Your subscription is cancelled!
+      internal static let unsubscribed = L10n.tr("Localizable", "Plans.Info.Unsubscribed")
+    }
+    internal enum Item {
+      /// Available
+      internal static let available = L10n.tr("Localizable", "Plans.Item.Available")
+      /// Subscribed
+      internal static let subscribed = L10n.tr("Localizable", "Plans.Item.Subscribed")
+    }
+    internal enum Nodes {
+      /// Nodes
+      internal static let title = L10n.tr("Localizable", "Plans.Nodes.Title")
+      internal enum Button {
+        /// Cancel subscription
+        internal static let cancel = L10n.tr("Localizable", "Plans.Nodes.Button.Cancel")
+        /// Subscribe
+        internal static let subscribe = L10n.tr("Localizable", "Plans.Nodes.Button.Subscribe")
       }
     }
     internal enum Subscribe {

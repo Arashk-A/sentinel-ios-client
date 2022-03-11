@@ -149,3 +149,12 @@
 "Purchases.Info.Completed" = "Purchase is succefully made.";
 
 "Plans.Title" = "Plans";
+"Plans.Empty" = "No plans are available at the moment";
+"Plans.Item.Subscribed" = "Subscribed";
+"Plans.Item.Available" = "Available";
+
+"Plans.Nodes.Title" = "Nodes";
+"Plans.Nodes.Button.Subscribe" = "Subscribe";
+"Plans.Nodes.Button.Cancel" = "Cancel subscription";
+"Plans.Info.Subscribed" = "You are now subscribed to this plan!";
+"Plans.Info.Unsubscribed" = "Your subscription is cancelled!";

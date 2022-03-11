@@ -20,6 +20,9 @@ struct PlanOptionView: View {
         Button(action: action) {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
+                    Text(model.isSubscribed ? L10n.Plans.Item.subscribed : L10n.Plans.Item.available)
+                        .applyTextStyle(.lightGrayMain(ofSize: 10, weight: .light))
+
                     HStack(alignment: .bottom, spacing: 5) {
                         Text("#\(model.id)")
                             .applyTextStyle(.lightGrayMain(ofSize: 10, weight: .light))
@@ -46,11 +49,17 @@ struct PlanOptionView: View {
     }
 }
 
-struct PlanOptionView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlanOptionView(
-            model: .init(id: 2, price: "25 DVPN", bandwidth: "250 GB", validity: "25 days"),
-            action: {}
-        )
-    }
-}
+//struct PlanOptionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlanOptionView(
+//            model: .init(
+//                id: 2,
+//                price: "25 DVPN",
+//                bandwidth: "250 GB",
+//                validity: "25 days",
+//                isSubscribed: true
+//            ),
+//            action: {}
+//        )
+//    }
+//}

@@ -143,6 +143,15 @@ extension ModulesFactory {
         PlansCoordinator(context: context, navigation: navigation).start()
     }
 
+    func makePlanNodesModule(plan: SentinelPlan, isSubscribed: Bool, for navigation: UINavigationController) {
+        PlanNodesCoordinator(
+            context: context,
+            navigation: navigation,
+            plan: plan,
+            isSubscribed: isSubscribed
+        ).start()
+    }
+
     func switchTo(tab: TabType) {
         tabSwitcher?.switchTo(tab: tab)
     }

@@ -22,7 +22,7 @@ enum PlansModelEvent {
 }
 
 final class PlansModel {
-    typealias Context = HasSentinelService
+    typealias Context = HasSentinelService & HasNodesService
     private let context: Context
 
     private let eventSubject = PassthroughSubject<PlansModelEvent, Never>()
@@ -30,8 +30,24 @@ final class PlansModel {
         eventSubject.eraseToAnyPublisher()
     }
 
+    private var cancellables = Set<AnyCancellable>()
+
+    private var subscriptions: [SentinelWallet.Subscription] = []
+
     init(context: Context) {
         self.context = context
+        
+        context.nodesService.subscriptions
+            .sink(receiveValue: { [weak self] subscriptions in
+                self?.subscriptions = subscriptions
+            })
+            .store(in: &cancellables)
+    }
+}
+
+extension PlansModel {
+    func isSubscribed(to plan: UInt64) -> Bool {
+        subscriptions.contains(where: { $0.plan == plan })
     }
 
     func refresh() {
@@ -40,7 +56,6 @@ final class PlansModel {
             case let .failure(error):
                 self?.eventSubject.send(.error(error))
             case let .success(plans):
-                log.debug("+++ \(plans)")
                 self?.eventSubject.send(.plans(plans))
             }
         }

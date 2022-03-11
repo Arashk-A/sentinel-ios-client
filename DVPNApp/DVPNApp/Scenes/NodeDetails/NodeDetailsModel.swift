@@ -50,4 +50,8 @@ extension NodeDetailsModel {
     var isSubscribed: Bool {
         configuration.isSubscribed
     }
+
+    var connectionAllowed: Bool {
+        !(configuration.planId != nil && !isSubscribed)
+    }
 }

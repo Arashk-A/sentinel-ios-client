@@ -18,9 +18,33 @@ struct PlansView: View {
     }
 
     var body: some View {
+        VStack {
+            if !viewModel.isLoading && viewModel.options.isEmpty {
+                Spacer()
+
+                Text(L10n.Plans.empty)
+                    .applyTextStyle(.whiteMain(ofSize: 18, weight: .semibold))
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+
+            plansView
+
+            Spacer()
+        }
+        .background(Asset.Colors.accentColor.color.asColor)
+        .onAppear(perform: viewModel.viewWillAppear)
+    }
+}
+
+extension PlansView {
+    var plansView: some View {
         ScrollView {
-            ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            if viewModel.isLoading {
+                ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .padding()
+            }
 
             VStack(alignment: .leading, spacing: 15) {
                 ForEach(Array(zip(viewModel.options.chunked(into: 2).indices, viewModel.options.chunked(into: 2))), id: \.0) { index, models in
@@ -35,11 +59,7 @@ struct PlansView: View {
                 }
             }
             .padding()
-
-            Spacer()
         }
-        .background(Asset.Colors.accentColor.color.asColor)
-        .onAppear(perform: viewModel.viewWillAppear)
     }
 }
 

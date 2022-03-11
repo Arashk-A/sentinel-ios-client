@@ -16,13 +16,14 @@ final class PlansViewModel: ObservableObject {
 
     enum Route {
         case error(Error)
+        case open(plan: SentinelPlan, isSubscribed: Bool)
     }
 
     private let model: PlansModel
     private var cancellables = Set<AnyCancellable>()
 
     @Published private(set) var options: [PlanOptionViewModel] = []
-    @Published var isLoading: Bool = false
+    @Published var isLoading: Bool = true
 
     init(model: PlansModel, router: Router) {
         self.model = model
@@ -50,6 +51,7 @@ extension PlansViewModel {
 
     func togglePlan(vm: PlanOptionViewModel) {
         UIImpactFeedbackGenerator.lightFeedback()
+        router.play(event: .open(plan: vm.plan, isSubscribed: vm.isSubscribed))
     }
 }
 
@@ -62,10 +64,11 @@ extension PlansViewModel {
             let priceString = PriceFormatter.fullFormat(amount: price.amount, denom: price.denom)
             
             return PlanOptionViewModel(
-                id: $0.id,
+                plan: $0,
                 price: priceString + " " + L10n.Common.Points.title,
                 bandwidth: (Int64($0.bytes) ?? 0).bandwidthGBString + " " + L10n.Common.gb,
-                validity: TimeFormatter.duration(from: $0.validity)
+                validity: TimeFormatter.duration(from: $0.validity),
+                isSubscribed: model.isSubscribed(to: $0.id)
             )
         }
 

@@ -59,10 +59,11 @@ struct NodeDetailsView: View {
             }
             
             Spacer()
-            
-            mainButton
-                .padding(20)
-            
+
+            if viewModel.connectionAllowed {
+                mainButton
+                    .padding(20)
+            }
         }
         .background(Asset.Colors.accentColor.color.asColor)
         .edgesIgnoringSafeArea(.bottom)

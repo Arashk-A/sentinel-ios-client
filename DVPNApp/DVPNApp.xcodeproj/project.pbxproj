@@ -80,6 +80,11 @@
 		755FBF0626AF0E6F00E9D408 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 755FBF0526AF0E6F00E9D408 /* SwiftKeychainWrapper */; };
 		755FBF0926AF0F1600E9D408 /* SecurityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FBF0826AF0F1600E9D408 /* SecurityService.swift */; };
 		7573579527DA812C008628BD /* PlanOptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573579427DA812B008628BD /* PlanOptionViewModel.swift */; };
+		7573579B27DA8C0C008628BD /* PlanNodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573579727DA8C0C008628BD /* PlanNodesView.swift */; };
+		7573579C27DA8C0C008628BD /* PlanNodesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573579827DA8C0C008628BD /* PlanNodesCoordinator.swift */; };
+		7573579D27DA8C0C008628BD /* PlanNodesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573579927DA8C0C008628BD /* PlanNodesViewModel.swift */; };
+		7573579E27DA8C0C008628BD /* PlanNodesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573579A27DA8C0C008628BD /* PlanNodesModel.swift */; };
+		757357A027DB9F51008628BD /* SentinelPlan+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7573579F27DB9F51008628BD /* SentinelPlan+Hashable.swift */; };
 		757F0B7E26D8D6CE000C0865 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757F0B7D26D8D6CE000C0865 /* Connectivity.swift */; };
 		757F7FB2274815E0005E031E /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757F7FB1274815E0005E031E /* TabBarCoordinator.swift */; };
 		758B261226AFEC4A00BD711E /* RouterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758B261126AFEC4A00BD711E /* RouterType.swift */; };
@@ -296,6 +301,11 @@
 		755F5F17270DE78600D416ED /* TextStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextStyle.swift; sourceTree = "<group>"; };
 		755FBF0826AF0F1600E9D408 /* SecurityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityService.swift; sourceTree = "<group>"; };
 		7573579427DA812B008628BD /* PlanOptionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanOptionViewModel.swift; sourceTree = "<group>"; };
+		7573579727DA8C0C008628BD /* PlanNodesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanNodesView.swift; sourceTree = "<group>"; };
+		7573579827DA8C0C008628BD /* PlanNodesCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanNodesCoordinator.swift; sourceTree = "<group>"; };
+		7573579927DA8C0C008628BD /* PlanNodesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanNodesViewModel.swift; sourceTree = "<group>"; };
+		7573579A27DA8C0C008628BD /* PlanNodesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanNodesModel.swift; sourceTree = "<group>"; };
+		7573579F27DB9F51008628BD /* SentinelPlan+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentinelPlan+Hashable.swift"; sourceTree = "<group>"; };
 		757F0B7D26D8D6CE000C0865 /* Connectivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connectivity.swift; sourceTree = "<group>"; };
 		757F7FB1274815E0005E031E /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		758B261126AFEC4A00BD711E /* RouterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterType.swift; sourceTree = "<group>"; };
@@ -748,6 +758,17 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		7573579627DA8C0C008628BD /* PlanNodes */ = {
+			isa = PBXGroup;
+			children = (
+				7573579827DA8C0C008628BD /* PlanNodesCoordinator.swift */,
+				7573579A27DA8C0C008628BD /* PlanNodesModel.swift */,
+				7573579727DA8C0C008628BD /* PlanNodesView.swift */,
+				7573579927DA8C0C008628BD /* PlanNodesViewModel.swift */,
+			);
+			path = PlanNodes;
+			sourceTree = "<group>";
+		};
 		757F7FB0274815D4005E031E /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -833,6 +854,7 @@
 			children = (
 				75D6564426C5493F000056B4 /* DVPNNodeInfo+Ext.swift */,
 				75E5BDF526D78FFB00C345B9 /* GRPCError+Ext.swift */,
+				7573579F27DB9F51008628BD /* SentinelPlan+Hashable.swift */,
 				752FCFED26E5E258001EA78D /* WalletErros+Ext.swift */,
 			);
 			path = Wallet;
@@ -1128,6 +1150,7 @@
 				753EDDF42715633A00DA76F8 /* NodeSelection */,
 				C64ED32326C57FE900222CA4 /* NodeSubscription */,
 				75D6563326C4CEB8000056B4 /* Onboarding */,
+				7573579627DA8C0C008628BD /* PlanNodes */,
 				75A1B6E727DA4D1D00770F5C /* Plans */,
 				755B3AA5274BE8DE009E2D75 /* Purchases */,
 				7504EA6C267B4E6700023D42 /* Root */,
@@ -1407,12 +1430,14 @@
 			files = (
 				751AD5F42715A33A004F5717 /* DNSSettingsRowViewModel.swift in Sources */,
 				9378543F270ECA400004483C /* FramedButton.swift in Sources */,
+				757357A027DB9F51008628BD /* SentinelPlan+Hashable.swift in Sources */,
 				7504EA6A267B4DD600023D42 /* ModulesFactory.swift in Sources */,
 				93DBF5542716DBFB006EBC65 /* NodesService.swift in Sources */,
 				7504EA8C267B71C800023D42 /* TunnelChanges.swift in Sources */,
 				757F0B7E26D8D6CE000C0865 /* Connectivity.swift in Sources */,
 				93DBF5432716A6B6006EBC65 /* StoresNodes.swift in Sources */,
 				75A1B6F127DA4D1D00770F5C /* PlansCoordinator.swift in Sources */,
+				7573579B27DA8C0C008628BD /* PlanNodesView.swift in Sources */,
 				93C3EC3B270AF19400B9CA4D /* GridView.swift in Sources */,
 				93FA0690270B4C5E0006A765 /* NodeInfoView.swift in Sources */,
 				93DBF570271888B8006EBC65 /* ContinentsRowViewType.swift in Sources */,
@@ -1426,6 +1451,7 @@
 				7573579527DA812C008628BD /* PlanOptionViewModel.swift in Sources */,
 				7504EA79267B5B4600023D42 /* TunnelStatus.swift in Sources */,
 				75E5BE0226DE2FA400C345B9 /* View+Ext.swift in Sources */,
+				7573579D27DA8C0C008628BD /* PlanNodesViewModel.swift in Sources */,
 				758DD9E7270B72D2000CD59B /* AccountCreationView.swift in Sources */,
 				7504EA73267B554C00023D42 /* NETunnelProviderManager+Ext.swift in Sources */,
 				75D655D926BAAAF4000056B4 /* ConnectionCoordinator.swift in Sources */,
@@ -1543,8 +1569,10 @@
 				93FA0696270B5A800006A765 /* Collection+Ext.swift in Sources */,
 				7554E2C426D4BB03001355F7 /* DNSSettingsRowView.swift in Sources */,
 				932D0AFD272176620064AEE4 /* PreloadService.swift in Sources */,
+				7573579E27DA8C0C008628BD /* PlanNodesModel.swift in Sources */,
 				9312CA6327045BC40062AFD3 /* DateFormatterCache.swift in Sources */,
 				7504E9CD267A183D00023D42 /* SceneDelegate.swift in Sources */,
+				7573579C27DA8C0C008628BD /* PlanNodesCoordinator.swift in Sources */,
 				75A1B6EF27DA4D1D00770F5C /* PlansView.swift in Sources */,
 				759DE5BE2715866C00DC7757 /* DNSSettingsCoordinator.swift in Sources */,
 				C64B495D26B8B3F70004A692 /* CountryTileView.swift in Sources */,

@@ -27,6 +27,10 @@ final class NodeDetailsViewModel: ObservableObject {
     @Published private(set) var nodeInfoViewModels: [NodeInfoViewModel] = []
     
     @Published private(set) var node: Node?
+
+    var connectionAllowed: Bool {
+        model.connectionAllowed
+    }
     
     private var cancellables = Set<AnyCancellable>()
     

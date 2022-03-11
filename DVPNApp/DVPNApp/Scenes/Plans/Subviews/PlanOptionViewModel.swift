@@ -9,8 +9,14 @@ import Foundation
 import SentinelWallet
 
 struct PlanOptionViewModel: Hashable {
-    let id: UInt64
+    let plan: SentinelPlan
     let price: String
     let bandwidth: String
     let validity: String
+
+    var isSubscribed: Bool
+
+    var id: UInt64 {
+        plan.id
+    }
 }

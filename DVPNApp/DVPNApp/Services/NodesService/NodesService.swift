@@ -172,6 +172,22 @@ extension NodesService: NodesServiceType {
             }
         }
     }
+
+    func loadNodesInfo(
+        for plan: UInt64,
+        completion: @escaping (Result<[SentinelNode], Error>) -> Void
+    ) {
+        sentinelService.queryNodesForPlan(with: plan) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                log.error(error)
+                completion(.failure(NodesServiceError.failToLoadData))
+            case .success(let nodes):
+                self.loadInfo(for: nodes, completion: completion)
+            }
+        }
+    }
 }
 
 // MARK: - Private
@@ -286,6 +302,30 @@ extension NodesService {
             case .success(let sentinelNodes):
                 self.loadNodes(from: Set(sentinelNodes.map { $0.address }))
             }
+        }
+    }
+
+    private func loadInfo(
+        for sentinelNodes: [SentinelNode],
+        completion: @escaping (Result<[SentinelNode], Error>) -> Void
+    ) {
+        let group = DispatchGroup()
+        var loadedNodes: [SentinelNode] = []
+
+        sentinelNodes.forEach { sentinelNode in
+            group.enter()
+
+            sentinelService.fetchInfo(for: sentinelNode, timeout: constants.timeout) { result in
+                if case let .success(node) = result {
+                    loadedNodes.append(sentinelNode.set(node: node))
+                }
+
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            completion(.success(loadedNodes))
         }
     }
 }
