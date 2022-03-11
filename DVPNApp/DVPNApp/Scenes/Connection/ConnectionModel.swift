@@ -403,27 +403,13 @@ extension ConnectionModel {
         }
         
         context.sentinelService.startNewSession(on: subscription.id, nodeAddress: nodeAddress) { [weak self] result in
-            guard let self = self, let subscriptionType = self.subscriptionType else { return }
+            guard let self = self else { return }
             
             switch result {
             case .failure(let error):
                 self.set(sessionStart: nil)
-                
-                log.debug(error)
-                
-                switch subscriptionType {
-                case .node:
-                    if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
-                        self.eventSubject.send(.resubscribeToNode(selectedNode))
-                        self.stopLoading()
-                        return
-                    }
-                    
-                    self.show(error: error)
-                case let .plan((nodeAddress, planId)):
-                    // TODO: handle more cases
-                    self.eventSubject.send(.resubscribeToPlan(nodeAddress: nodeAddress, planId: planId))
-                }
+                self.show(error: error)
+                self.stopLoading()
             case .success(let id):
                 self.set(sessionStart: Date())
                 self.fetchConnectionData(remoteURLString: nodeURL, id: id)
@@ -552,11 +538,24 @@ extension ConnectionModel {
             accountAddress: context.walletService.accountAddress,
             signature: signature
         ) { [weak self] result in
-            guard let self = self else { return }
+            guard let self = self, let subscriptionType = self.subscriptionType else { return }
 
             switch result {
             case let .failure(error):
-                self.show(error: error)
+                switch subscriptionType {
+                case .node:
+                    if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
+                        self.eventSubject.send(.resubscribeToNode(selectedNode))
+                        self.stopLoading()
+                        return
+                    }
+                    
+                    self.show(error: error)
+                case let .plan((nodeAddress, planId)):
+                    // TODO: handle more cases
+                    self.eventSubject.send(.resubscribeToPlan(nodeAddress: nodeAddress, planId: planId))
+                    self.stopLoading()
+                }
             case let .success((data, wgKey)):
                 self.context.connectionInfoStorage.set(sessionId: Int(id))
                 self.context.tunnelManager.createNewProfile(
