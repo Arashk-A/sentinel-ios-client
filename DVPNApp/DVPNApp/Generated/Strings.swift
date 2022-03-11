@@ -304,6 +304,8 @@ internal enum L10n {
   }
 
   internal enum Plans {
+    /// No plans are available at the moment
+    internal static let empty = L10n.tr("Localizable", "Plans.Empty")
     /// SUBSCRIBE
     internal static let subscribe = L10n.tr("Localizable", "Plans.Subscribe")
     /// Plans
@@ -325,6 +327,16 @@ internal enum L10n {
       internal static let available = L10n.tr("Localizable", "Plans.Item.Available")
       /// Subscribed
       internal static let subscribed = L10n.tr("Localizable", "Plans.Item.Subscribed")
+    }
+    internal enum Nodes {
+      /// Nodes
+      internal static let title = L10n.tr("Localizable", "Plans.Nodes.Title")
+      internal enum Button {
+        /// Cancel subscription
+        internal static let cancel = L10n.tr("Localizable", "Plans.Nodes.Button.Cancel")
+        /// Subscribe
+        internal static let subscribe = L10n.tr("Localizable", "Plans.Nodes.Button.Subscribe")
+      }
     }
     internal enum Subscribe {
       /// Subscribe to %@?
