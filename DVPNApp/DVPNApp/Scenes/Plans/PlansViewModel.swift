@@ -23,7 +23,7 @@ final class PlansViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     @Published private(set) var options: [PlanOptionViewModel] = []
-    @Published var isLoading: Bool = false
+    @Published var isLoading: Bool = true
 
     init(model: PlansModel, router: Router) {
         self.model = model
