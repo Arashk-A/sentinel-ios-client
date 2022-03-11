@@ -17,8 +17,13 @@ final class PlanNodesViewModel: ObservableObject {
 
     enum Route {
         case error(Error)
+        case info(String)
         case connect
         case details(SentinelNode, isSubscribed: Bool)
+        case subscribe(plan: String, completion: (Bool) -> Void)
+        case cancelSubscription(plan: SentinelPlan)
+        case addTokensAlert(completion: (Bool) -> Void)
+        case accountInfo
     }
 
     @Published private(set) var locations: [NodeSelectionRowViewModel] = []
@@ -29,9 +34,9 @@ final class PlanNodesViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     @Published var isLoadingNodes: Bool = true
-
+    @Published var isLoading: Bool = false
+    @Published var isSubscribed: Bool
     private let plan: SentinelPlan
-    let isSubscribed: Bool
 
     init(plan: SentinelPlan, isSubscribed: Bool, model: PlanNodesModel, router: Router) {
         self.plan = plan
@@ -61,7 +66,8 @@ extension PlanNodesViewModel {
     }
 
     func didTapMainButton() {
-
+        UIImpactFeedbackGenerator.lightFeedback()
+        isSubscribed ? didTapCancelSubscription() : didTapSubscribe()
     }
 }
 
@@ -79,6 +85,10 @@ extension PlanNodesViewModel {
                     self?.update(to: nodes)
                 case .connect:
                     self?.router.play(event: .connect)
+                case .addTokens:
+                    self?.showAddTokens()
+                case let .changeState(isSubscribed):
+                    self?.changeSubscription(to: isSubscribed)
                 }
             }
             .store(in: &cancellables)
@@ -101,5 +111,36 @@ extension PlanNodesViewModel {
         self.locations = locations
         self.nodes = nodes
         isLoadingNodes = false
+    }
+
+    private func changeSubscription(to state: Bool) {
+        isLoading = false
+        isSubscribed = state
+        router.play(event: .info(state ? L10n.Plans.Info.subscribed : L10n.Plans.Info.unsubscribed))
+    }
+
+    private func didTapSubscribe() {
+        router.play(
+            event: .subscribe(plan: "plan #\(plan.id)") { [weak self] result in
+                guard let self = self, result else {
+                    return
+                }
+                self.isLoading = true
+                self.model.checkBalanceAndSubscribe()
+            }
+        )
+    }
+
+    private func didTapCancelSubscription() {
+        router.play(event: .cancelSubscription(plan: plan))
+    }
+
+    private func showAddTokens() {
+        UIImpactFeedbackGenerator.lightFeedback()
+        router.play(event: .addTokensAlert { [weak self] result in
+            self?.isLoading = false
+            guard result else { return }
+            self?.router.play(event: .accountInfo)
+        })
     }
 }

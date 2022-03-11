@@ -64,11 +64,25 @@ extension PlanNodesView {
 
     var mainButton: some View {
         Button(action: viewModel.didTapMainButton) {
-            Text(viewModel.isSubscribed ? L10n.Plans.Nodes.Button.cancel : L10n.Plans.Nodes.Button.subscribe)
-                .applyTextStyle(.whiteMain(ofSize: 20, weight: .bold))
-                .padding(.vertical, 25)
+            ZStack(alignment: .leading) {
+                if viewModel.isLoading {
+                    ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
+                        .frame(width: 15, height: 15)
+                        .padding()
+                }
+                HStack {
+                    Text(
+                        viewModel.isSubscribed ?
+                        L10n.Plans.Nodes.Button.cancel : L10n.Plans.Nodes.Button.subscribe
+                    )
+                        .applyTextStyle(.whiteMain(ofSize: 20, weight: .bold))
+                        .padding(.vertical, 25)
+                        .frame(maxWidth: .infinity)
+                }
                 .frame(maxWidth: .infinity)
+            }
         }
+        .disabled(viewModel.isLoading)
         .background(Asset.Colors.navyBlue.color.asColor)
         .cornerRadius(5)
         .padding()
