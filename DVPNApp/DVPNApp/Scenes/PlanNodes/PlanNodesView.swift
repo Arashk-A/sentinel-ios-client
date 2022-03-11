@@ -20,6 +20,8 @@ struct PlanNodesView: View {
                 emptyStateView
             } else {
                 nodesList
+
+                mainButton
             }
         }
         .background(Asset.Colors.accentColor.color.asColor)
@@ -58,5 +60,17 @@ extension PlanNodesView {
             }
         }
         .listStyle(PlainListStyle())
+    }
+
+    var mainButton: some View {
+        Button(action: viewModel.didTapMainButton) {
+            Text(viewModel.isSubscribed ? L10n.Plans.Nodes.Button.cancel : L10n.Plans.Nodes.Button.subscribe)
+                .applyTextStyle(.whiteMain(ofSize: 20, weight: .bold))
+                .padding(.vertical, 25)
+                .frame(maxWidth: .infinity)
+        }
+        .background(Asset.Colors.navyBlue.color.asColor)
+        .cornerRadius(5)
+        .padding()
     }
 }

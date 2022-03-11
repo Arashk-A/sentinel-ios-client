@@ -30,7 +30,12 @@ final class PlanNodesCoordinator: CoordinatorType {
 
     func start() {
         let model = PlanNodesModel(context: context, plan: plan, isSubscribed: isSubscribed)
-        let viewModel = PlanNodesViewModel(plan: plan, model: model, router: asRouter())
+        let viewModel = PlanNodesViewModel(
+            plan: plan,
+            isSubscribed: isSubscribed,
+            model: model,
+            router: asRouter()
+        )
         let view = PlanNodesView(viewModel: viewModel)
         let controller = UIHostingController(rootView: view)
         navigation?.pushViewController(controller, animated: true)

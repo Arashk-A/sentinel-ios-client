@@ -24,7 +24,6 @@ final class PlanNodesViewModel: ObservableObject {
     @Published private(set) var locations: [NodeSelectionRowViewModel] = []
     
     private(set) var nodes: [SentinelNode] = []
-    private(set) var loadedNodesCount: Int = 0
     
     private let model: PlanNodesModel
     private var cancellables = Set<AnyCancellable>()
@@ -32,9 +31,11 @@ final class PlanNodesViewModel: ObservableObject {
     @Published var isLoadingNodes: Bool = true
 
     private let plan: SentinelPlan
+    let isSubscribed: Bool
 
-    init(plan: SentinelPlan, model: PlanNodesModel, router: Router) {
+    init(plan: SentinelPlan, isSubscribed: Bool, model: PlanNodesModel, router: Router) {
         self.plan = plan
+        self.isSubscribed = isSubscribed
         self.model = model
         self.router = router
 
@@ -57,6 +58,10 @@ extension PlanNodesViewModel {
         router.play(
             event: .details(sentinelNode, isSubscribed: model.isSubscribed)
         )
+    }
+
+    func didTapMainButton() {
+
     }
 }
 
