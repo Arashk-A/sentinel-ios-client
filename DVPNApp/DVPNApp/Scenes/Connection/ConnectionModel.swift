@@ -442,6 +442,9 @@ extension ConnectionModel {
                     if let tunnel = self.context.tunnelManager.lastTunnel {
                         self.context.tunnelManager.startActivation(of: tunnel)
                         self.update(subscriptionInfo: subscription, status: .connected)
+                    } else {
+                        self.connect(to: subscription)
+                        self.updateLocation()
                     }
                 case (true, false), (false, false):
                     self.connect(to: subscription)
