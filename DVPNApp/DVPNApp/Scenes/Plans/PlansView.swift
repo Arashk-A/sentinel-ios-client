@@ -40,9 +40,12 @@ struct PlansView: View {
 extension PlansView {
     var plansView: some View {
         ScrollView {
-            ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            
+            if viewModel.isLoading {
+                ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .padding()
+            }
+
             VStack(alignment: .leading, spacing: 15) {
                 ForEach(Array(zip(viewModel.options.chunked(into: 2).indices, viewModel.options.chunked(into: 2))), id: \.0) { index, models in
                     HStack(spacing: 15) {
