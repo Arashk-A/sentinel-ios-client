@@ -165,10 +165,8 @@ extension NodesService: NodesServiceType {
                     return
                 }
                 
-                let plans = subscriptions.filter { $0.plan != 0 }.map { $0.plan }
                 let addresses = Set(subscriptions.map { $0.node }.filter { !$0.isEmpty })
                 self.loadNodes(from: addresses)
-                plans.forEach { self.loadNodeInfo(for: $0)}
             }
         }
     }
