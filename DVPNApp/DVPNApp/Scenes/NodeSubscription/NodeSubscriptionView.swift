@@ -1,6 +1,6 @@
 //
 //  NodeSubscriptionView.swift
-//  Test
+//  DVPNApp
 //
 //  Created by Aleksandr Litreev on 12.08.2021.
 //

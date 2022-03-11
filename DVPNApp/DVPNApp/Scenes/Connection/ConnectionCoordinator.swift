@@ -47,8 +47,18 @@ extension ConnectionCoordinator: RouterType {
             ModulesFactory.shared.makeNodeSubscriptionModule(node: node, delegate: delegate, for: navigation)
         case let .dismiss(isEnabled):
             setBackNavigationEnability(isEnabled: isEnabled)
-        case let .resubscribe(completion):
-            showResubscribeAlert(completion: completion)
+        case let .resubscribeToNode(completion):
+            showResubscribeAlert(
+                title: L10n.Connection.ResubscribeToNode.title,
+                message: L10n.Connection.ResubscribeToNode.subtitle,
+                completion: completion
+            )
+        case let .resubscribeToPlan(completion: completion):
+            showResubscribeAlert(
+                title: L10n.Connection.ResubscribeToPlan.title,
+                message: L10n.Connection.ResubscribeToPlan.subtitle,
+                completion: completion
+            )
         }
     }
 }
@@ -62,12 +72,12 @@ extension ConnectionCoordinator {
         navigation?.navigationBar.tintColor = isEnabled ? .white : .gray
     }
     
-    private func showResubscribeAlert(completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(
-            title: L10n.Connection.Resubscribe.title,
-            message: L10n.Connection.Resubscribe.subtitle,
-            preferredStyle: .alert
-        )
+    private func showResubscribeAlert(
+        title: String,
+        message: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
         let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
             UIImpactFeedbackGenerator.lightFeedback()

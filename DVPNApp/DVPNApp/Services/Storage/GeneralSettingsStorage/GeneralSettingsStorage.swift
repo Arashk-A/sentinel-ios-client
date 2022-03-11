@@ -13,6 +13,7 @@ private enum Keys: String {
     case didPassOnboarding
 
     case lastSelectedNodeKey
+    case lastSelectedPlanId
     case walletKey
     case lastSessionKey
     case dnsKey
@@ -56,6 +57,14 @@ extension GeneralSettingsStorage: StoresConnectInfo {
 
     func lastSelectedNode() -> String? {
         settingsStorageStrategy.object(ofType: String.self, forKey: Keys.lastSelectedNodeKey.rawValue)
+    }
+    
+    func set(lastSelectedPlanId: UInt64?) {
+        settingsStorageStrategy.setObject(lastSelectedPlanId, forKey: Keys.lastSelectedPlanId.rawValue)
+    }
+    
+    func lastSelectedPlanId() -> UInt64? {
+        settingsStorageStrategy.object(ofType: UInt64.self, forKey: Keys.lastSelectedPlanId.rawValue)
     }
 
     func set(sessionId: Int?) {

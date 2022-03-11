@@ -113,6 +113,8 @@ internal enum L10n {
       internal static let disconnect = L10n.tr("Localizable", "Connection.Button.Disconnect")
     }
     internal enum Error {
+      /// You do not have any subscriptions
+      internal static let emptySubscriptions = L10n.tr("Localizable", "Connection.Error.EmptySubscriptions")
       /// Misconfigured nodes. Please, try again or select another node
       internal static let invalidURL = L10n.tr("Localizable", "Connection.Error.InvalidURL")
       /// Not enough points to broadcast - you'll need at least 0.01 points on your account. Please, check your balance and try again later
@@ -138,11 +140,17 @@ internal enum L10n {
       /// Fetching the node info
       internal static let fetching = L10n.tr("Localizable", "Connection.LocationSelector.Fetching")
     }
-    internal enum Resubscribe {
+    internal enum ResubscribeToNode {
       /// Data update is pending, but it seems you used all data. Do you want to resubscribe?
-      internal static let subtitle = L10n.tr("Localizable", "Connection.Resubscribe.Subtitle")
+      internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToNode.Subtitle")
       /// All data used
-      internal static let title = L10n.tr("Localizable", "Connection.Resubscribe.Title")
+      internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToNode.Title")
+    }
+    internal enum ResubscribeToPlan {
+      /// Do you want to resubscribe?
+      internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToPlan.Subtitle")
+      /// All data is used or plan expired
+      internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.Title")
     }
     internal enum Status {
       internal enum Connection {

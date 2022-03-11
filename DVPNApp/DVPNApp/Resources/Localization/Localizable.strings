@@ -58,8 +58,11 @@
 "Connection.Error.SignatureGenerationFailed" = "Misconfigured wallet. Please, try again or re-import your mnemonic";
 "Connection.Error.InvalidURL" = "Misconfigured nodes. Please, try again or select another node";
 "Connection.Error.NotEnoughTokens" = "Not enough points to broadcast - you'll need at least 0.01 points on your account. Please, check your balance and try again later";
-"Connection.Resubscribe.Title" = "All data used";
-"Connection.Resubscribe.Subtitle" = "Data update is pending, but it seems you used all data. Do you want to resubscribe?";
+"Connection.Error.EmptySubscriptions" = "You do not have any subscriptions";
+"Connection.ResubscribeToNode.Title" = "All data used";
+"Connection.ResubscribeToNode.Subtitle" = "Data update is pending, but it seems you used all data. Do you want to resubscribe?";
+"Connection.ResubscribeToPlan.Title" = "All data is used or plan expired";
+"Connection.ResubscribeToPlan.Subtitle" = "Do you want to resubscribe?";
 
 "Home.Node.Details.Price" = "Price";
 "Home.Node.Details.Latency" = "Latency";
