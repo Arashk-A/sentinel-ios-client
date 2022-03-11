@@ -320,6 +320,12 @@ internal enum L10n {
         internal static let failed = L10n.tr("Localizable", "Plans.Error.Payment.Failed")
       }
     }
+    internal enum Item {
+      /// Available
+      internal static let available = L10n.tr("Localizable", "Plans.Item.Available")
+      /// Subscribed
+      internal static let subscribed = L10n.tr("Localizable", "Plans.Item.Subscribed")
+    }
     internal enum Subscribe {
       /// Subscribe to %@?
       internal static func title(_ p1: Any) -> String {

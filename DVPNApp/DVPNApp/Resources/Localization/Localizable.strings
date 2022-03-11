@@ -146,3 +146,5 @@
 "Purchases.Info.Completed" = "Purchase is succefully made.";
 
 "Plans.Title" = "Plans";
+"Plans.Item.Subscribed" = "Subscribed";
+"Plans.Item.Available" = "Available";
