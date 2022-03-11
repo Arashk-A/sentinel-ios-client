@@ -156,3 +156,5 @@
 "Plans.Nodes.Title" = "Nodes";
 "Plans.Nodes.Button.Subscribe" = "Subscribe";
 "Plans.Nodes.Button.Cancel" = "Cancel subscription";
+"Plans.Info.Subscribed" = "You are now subscribed to this plan!";
+"Plans.Info.Unsubscribed" = "Your subscription is cancelled!";

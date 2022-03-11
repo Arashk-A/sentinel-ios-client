@@ -330,6 +330,12 @@ internal enum L10n {
         internal static let failed = L10n.tr("Localizable", "Plans.Error.Payment.Failed")
       }
     }
+    internal enum Info {
+      /// You are now subscribed to this plan!
+      internal static let subscribed = L10n.tr("Localizable", "Plans.Info.Subscribed")
+      /// Your subscription is cancelled!
+      internal static let unsubscribed = L10n.tr("Localizable", "Plans.Info.Unsubscribed")
+    }
     internal enum Item {
       /// Available
       internal static let available = L10n.tr("Localizable", "Plans.Item.Available")
