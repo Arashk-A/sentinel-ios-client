@@ -63,7 +63,7 @@ extension PlanNodesCoordinator: RouterType {
         case let .details(node, isSubscribed):
             ModulesFactory.shared.makeNodeDetailsModule(
                 for: navigation,
-                configuration: .init(node: node, isSubscribed: isSubscribed)
+                configuration: .init(node: node, planId: plan.id, isSubscribed: isSubscribed)
             )
         }
     }
