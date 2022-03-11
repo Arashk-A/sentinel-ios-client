@@ -564,9 +564,12 @@ extension ConnectionModel {
                     
                     self.show(error: error)
                 case let .plan((nodeAddress, planId)):
-                    // TODO: handle more cases
-                    self.eventSubject.send(.resubscribeToPlan(nodeAddress: nodeAddress, planId: planId))
-                    self.stopLoading()
+                    if let afError = error.asAFError, afError.isSessionTaskError {
+                        self.eventSubject.send(.resubscribeToPlan(nodeAddress: nodeAddress, planId: planId))
+                        self.stopLoading()
+                        return
+                    }
+                    self.show(error: error)
                 }
             case let .success((data, wgKey)):
                 self.context.connectionInfoStorage.set(sessionId: Int(id))
