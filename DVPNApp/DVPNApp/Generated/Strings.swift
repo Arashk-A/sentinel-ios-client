@@ -314,7 +314,7 @@ internal enum L10n {
   internal enum Plans {
     /// SUBSCRIBE
     internal static let subscribe = L10n.tr("Localizable", "Plans.Subscribe")
-    /// How much points do you want to spend?
+    /// Plans
     internal static let title = L10n.tr("Localizable", "Plans.Title")
     internal enum AddTokens {
       /// Top-up your wallet?
@@ -410,6 +410,8 @@ internal enum L10n {
       internal static let continents = L10n.tr("Localizable", "TabBar.Item.Continents")
       /// Extras
       internal static let extra = L10n.tr("Localizable", "TabBar.Item.Extra")
+      /// Plans
+      internal static let plans = L10n.tr("Localizable", "TabBar.Item.Plans")
       /// Subscribed
       internal static let subscribedNodes = L10n.tr("Localizable", "TabBar.Item.SubscribedNodes")
     }

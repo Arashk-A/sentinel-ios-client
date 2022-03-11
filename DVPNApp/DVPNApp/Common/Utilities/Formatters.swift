@@ -85,3 +85,18 @@ enum CountryFormatter {
         })
     }
 }
+
+// MARK: - TimeFormatter
+
+enum TimeFormatter {
+    static func duration(from interval: Double) -> String {
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: "en_US")
+        let formatter = DateComponentsFormatter()
+        formatter.calendar = calendar
+        formatter.allowedUnits = [.year, .month, .day]
+        formatter.unitsStyle = .full
+
+        return formatter.string(from: interval) ?? ""
+    }
+}

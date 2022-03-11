@@ -124,6 +124,7 @@ internal enum Asset {
     internal static let account = ImageAsset(name: "tabbar/account")
     internal static let continents = ImageAsset(name: "tabbar/continents")
     internal static let extra = ImageAsset(name: "tabbar/extra")
+    internal static let provider = ImageAsset(name: "tabbar/provider")
     internal static let subscribed = ImageAsset(name: "tabbar/subscribed")
   }
   internal enum Tokens {

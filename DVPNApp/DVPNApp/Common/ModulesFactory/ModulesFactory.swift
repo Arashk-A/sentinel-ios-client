@@ -139,6 +139,10 @@ extension ModulesFactory {
         PurchasesCoordinator(context: context, navigation: navigation).start()
     }
 
+    func makePlansModule(for navigation: UINavigationController) {
+        PlansCoordinator(context: context, navigation: navigation).start()
+    }
+
     func switchTo(tab: TabType) {
         tabSwitcher?.switchTo(tab: tab)
     }
@@ -245,6 +249,15 @@ extension ModulesFactory {
         let model = PurchasesModel(context: context)
         let viewModel = PurchasesViewModel(model: model, router: coordinator)
         let view = PurchasesView(viewModel: viewModel)
+
+        return view
+    }
+
+    func getPlansScene() -> PlansView {
+        let coordinator = PlansCoordinator(context: context, navigation: UINavigationController()).asRouter()
+        let model = PlansModel(context: context)
+        let viewModel = PlansViewModel(model: model, router: coordinator)
+        let view = PlansView(viewModel: viewModel)
 
         return view
     }

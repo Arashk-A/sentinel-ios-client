@@ -10,6 +10,7 @@ import UIKit
 /// A enum that describes tabs.
 enum TabType: Int, CaseIterable {
     case continents
+    case plans
     case subscribedNodes
     case account
     case extra
@@ -18,6 +19,8 @@ enum TabType: Int, CaseIterable {
         switch self {
         case .continents:
             return L10n.TabBar.Item.continents.capitalized
+        case .plans:
+            return L10n.TabBar.Item.plans
         case .subscribedNodes:
             return L10n.TabBar.Item.subscribedNodes
         case .account:
@@ -31,6 +34,8 @@ enum TabType: Int, CaseIterable {
         switch self {
         case .continents:
             return Asset.Tabbar.continents.image
+        case .plans:
+            return Asset.Tabbar.provider.image
         case .subscribedNodes:
             return Asset.Tabbar.subscribed.image
         case .account:
@@ -50,7 +55,6 @@ final class TabBarCoordinator: CoordinatorType {
     private let tabs = TabType.allCases
 
     private weak var window: UIWindow?
-
 
     init(window: UIWindow) {
         self.window = window
@@ -93,24 +97,21 @@ extension TabBarCoordinator {
     }
 
     private func makeTabContent(for tab: TabType) -> UINavigationController {
+        let navigationController = UINavigationController()
         switch tab {
         case .continents:
-            let navigationController = UINavigationController()
             ModulesFactory.shared.makeHomeModule(for: navigationController)
-            return navigationController
         case .subscribedNodes:
-            let navigationController = UINavigationController()
             ModulesFactory.shared.makeSubscribedNodesModule(for: navigationController)
-            return navigationController
+        case .plans:
+            ModulesFactory.shared.makePlansModule(for: navigationController)
         case .account:
-            let navigationController = UINavigationController()
             ModulesFactory.shared.makeAccountInfoModule(for: navigationController)
-            return navigationController
         case .extra:
-            let navigationController = UINavigationController()
             ModulesFactory.shared.makeExtraModule(for: navigationController)
-            return navigationController
         }
+
+        return navigationController
     }
 }
 
