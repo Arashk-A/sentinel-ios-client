@@ -171,11 +171,20 @@ extension ConnectionModel {
     /// Returns false if no quota
     private func checkQuotaAndSubscription(hasQuota: Bool) -> Bool {
         guard hasQuota, subscription?.isActive ?? false else {
-            guard let selectedNode = selectedNode else {
+            guard let subscriptionType = subscriptionType else {
                 return false
             }
             
-            eventSubject.send(.openSubscription(for: selectedNode))
+            switch subscriptionType {
+            case .node:
+                guard let selectedNode = selectedNode else {
+                    return false
+                }
+                eventSubject.send(.openSubscription(for: selectedNode))
+            case .plan:
+                #warning("TODO: no quota, resubscribe to plan")
+            }
+            
             eventSubject.send(.updateConnection(status: .disconnected))
             eventSubject.send(.setButton(isLoading: false))
             return false
