@@ -49,17 +49,17 @@ struct PlanOptionView: View {
     }
 }
 
-struct PlanOptionView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlanOptionView(
-            model: .init(
-                id: 2,
-                price: "25 DVPN",
-                bandwidth: "250 GB",
-                validity: "25 days",
-                isSubscribed: true
-            ),
-            action: {}
-        )
-    }
-}
+//struct PlanOptionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlanOptionView(
+//            model: .init(
+//                id: 2,
+//                price: "25 DVPN",
+//                bandwidth: "250 GB",
+//                validity: "25 days",
+//                isSubscribed: true
+//            ),
+//            action: {}
+//        )
+//    }
+//}
