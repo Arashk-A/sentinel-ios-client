@@ -65,7 +65,8 @@ extension PlansViewModel {
                 id: $0.id,
                 price: priceString + " " + L10n.Common.Points.title,
                 bandwidth: (Int64($0.bytes) ?? 0).bandwidthGBString + " " + L10n.Common.gb,
-                validity: TimeFormatter.duration(from: $0.validity)
+                validity: TimeFormatter.duration(from: $0.validity),
+                isSubscribed: model.isSubscribed(to: $0.id)
             )
         }
 

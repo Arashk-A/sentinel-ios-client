@@ -13,4 +13,6 @@ struct PlanOptionViewModel: Hashable {
     let price: String
     let bandwidth: String
     let validity: String
+
+    var isSubscribed: Bool
 }
