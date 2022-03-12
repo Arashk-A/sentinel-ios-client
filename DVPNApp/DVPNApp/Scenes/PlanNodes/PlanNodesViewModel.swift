@@ -18,11 +18,9 @@ final class PlanNodesViewModel: ObservableObject {
     enum Route {
         case error(Error)
         case info(String)
+        case alert(title: String, message: String?, completion: (Bool) -> Void)
         case connect
         case details(SentinelNode, isSubscribed: Bool)
-        case subscribe(plan: String, completion: (Bool) -> Void)
-        case cancelSubscription(plan: SentinelPlan)
-        case addTokensAlert(completion: (Bool) -> Void)
         case accountInfo
     }
 
@@ -121,7 +119,10 @@ extension PlanNodesViewModel {
 
     private func didTapSubscribe() {
         router.play(
-            event: .subscribe(plan: "plan #\(plan.id)") { [weak self] result in
+            event: .alert(
+                title: L10n.Plans.Subscribe.title("plan #\(plan.id)"),
+                message: nil
+            ) { [weak self] result in
                 guard let self = self, result else {
                     return
                 }
@@ -132,15 +133,30 @@ extension PlanNodesViewModel {
     }
 
     private func didTapCancelSubscription() {
-        router.play(event: .cancelSubscription(plan: plan))
+        router.play(
+            event: .alert(
+                title: L10n.Plans.Subscribe.title("plan #\(plan.id)"),
+                message: nil
+            ) { [weak self] result in
+                guard let self = self, result else {
+                    return
+                }
+                self.isLoading = true
+            }
+        )
     }
 
     private func showAddTokens() {
         UIImpactFeedbackGenerator.lightFeedback()
-        router.play(event: .addTokensAlert { [weak self] result in
-            self?.isLoading = false
-            guard result else { return }
-            self?.router.play(event: .accountInfo)
-        })
+        router.play(
+            event: .alert(
+                title: L10n.Plans.AddTokens.title,
+                message: L10n.Plans.AddTokens.subtitle
+            ) { [weak self] result in
+                self?.isLoading = false
+                guard result else { return }
+                self?.router.play(event: .accountInfo)
+            }
+        )
     }
 }

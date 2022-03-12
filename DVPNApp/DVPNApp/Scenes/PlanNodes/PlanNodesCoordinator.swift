@@ -72,65 +72,15 @@ extension PlanNodesCoordinator: RouterType {
                 for: navigation,
                 configuration: .init(node: node, planId: plan.id, isSubscribed: isSubscribed)
             )
-        case let .subscribe(plan, completion):
-            showSubscribeAlert(name: plan, completion: completion)
-        case let .cancelSubscription(plan):
-            #warning("TODO cancelSubscription for plan")
-        case let .addTokensAlert(completion: completion):
-            showNotEnoughTokensAlert(completion: completion)
+        case let .alert(title, message, completion):
+            showAlert(
+                title: title,
+                message: message,
+                on: navigation,
+                completion: completion
+            )
         case .accountInfo:
             navigation.dismiss(animated: true) { ModulesFactory.shared.switchTo(tab: .account) }
         }
-    }
-}
-
-extension PlanNodesCoordinator {
-    private func showSubscribeAlert(
-        name: String,
-        completion: @escaping (Bool) -> Void
-    ) {
-        let alert = UIAlertController(
-            title: L10n.Plans.Subscribe.title(name),
-            message: nil,
-            preferredStyle: .alert
-        )
-
-        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(false)
-        }
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        navigation?.present(alert, animated: true, completion: nil)
-    }
-
-    private func showNotEnoughTokensAlert(completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(
-            title: L10n.Plans.AddTokens.title,
-            message: L10n.Plans.AddTokens.subtitle,
-            preferredStyle: .alert
-        )
-
-        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(false)
-        }
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        navigation?.present(alert, animated: true, completion: nil)
     }
 }
