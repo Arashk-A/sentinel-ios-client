@@ -75,11 +75,11 @@ final class ConnectionViewModel: ObservableObject {
                     self?.show(error: error)
                 case let .openSubscription(node):
                     router.play(event: .openSubscription(for: node, delegate: self))
-                case .openPlans:
+                case let .openPlans(plansOpeningReason):
                     router.play(
                         event: .openPlans(
-                            title: L10n.Connection.ResubscribeToPlan.QuotaLeft.title,
-                            message: L10n.Connection.ResubscribeToPlan.subtitle
+                            title: plansOpeningReason.title,
+                            message: plansOpeningReason.message
                         )
                     )
                 case let .warning(error):
@@ -96,13 +96,6 @@ final class ConnectionViewModel: ObservableObject {
                             
                             router.play(event: .openSubscription(for: node, delegate: self))
                         }
-                    )
-                case .resubscribeToPlan:
-                    router.play(
-                        event: .openPlans(
-                            title: L10n.Connection.ResubscribeToPlan.QuotaLeftOrPlanExpired.title,
-                            message: L10n.Connection.ResubscribeToPlan.subtitle
-                        )
                     )
                 }
             }

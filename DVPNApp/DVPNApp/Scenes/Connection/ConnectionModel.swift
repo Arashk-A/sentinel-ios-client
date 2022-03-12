@@ -25,10 +25,8 @@ enum ConnectionModelEvent {
     
     /// When node quota is over
     case openSubscription(for: DVPNNodeInfo)
-    /// When plan quota is over
-    case openPlans
+    case openPlans(PlansOpeningReason)
     case resubscribeToNode(DVPNNodeInfo)
-    case resubscribeToPlan
 }
 
 enum SubscriptionType {
@@ -182,9 +180,14 @@ extension ConnectionModel {
                 guard let selectedNode = selectedNode else {
                     return false
                 }
-                eventSubject.send(.openSubscription(for: selectedNode))
+                
+                if subscription?.plan == 0 {
+                    eventSubject.send(.openSubscription(for: selectedNode))
+                } else {
+                    eventSubject.send(.openPlans(.nodeWasMovedToPlan))
+                }
             case .plan:
-                eventSubject.send(.openPlans)
+                eventSubject.send(.openPlans(.quotaLeft))
             }
             
             eventSubject.send(.updateConnection(status: .disconnected))
@@ -572,7 +575,12 @@ extension ConnectionModel {
                 switch subscriptionType {
                 case .node:
                     if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
-                        self.eventSubject.send(.resubscribeToNode(selectedNode))
+                        if self.subscription?.plan == 0 {
+                            self.eventSubject.send(.resubscribeToNode(selectedNode))
+                        } else {
+                            self.eventSubject.send(.openPlans(.nodeWasMovedToPlan))
+                        }
+                        
                         self.stopLoading()
                         return
                     }
@@ -580,7 +588,7 @@ extension ConnectionModel {
                     self.show(error: error)
                 case .plan:
                     if let afError = error.asAFError, afError.isSessionTaskError {
-                        self.eventSubject.send(.resubscribeToPlan)
+                        self.eventSubject.send(.openPlans(.quotaLeftOrPlanExpired))
                         self.stopLoading()
                         return
                     }

@@ -151,6 +151,12 @@ internal enum L10n {
     internal enum ResubscribeToPlan {
       /// Do you want to resubscribe?
       internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToPlan.Subtitle")
+      internal enum NodeWasMovedToPlan {
+        /// The node is in a plan now. Do you want to subscribe?
+        internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToPlan.NodeWasMovedToPlan.Subtitle")
+        /// All data is used
+        internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.NodeWasMovedToPlan.Title")
+      }
       internal enum QuotaLeft {
         /// All data is used
         internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.QuotaLeft.Title")
