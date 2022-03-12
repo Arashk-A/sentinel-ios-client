@@ -181,7 +181,7 @@ extension ConnectionModel {
                     return false
                 }
                 
-                if subscription?.plan == 0 {
+                if !selectedNode.price.isEmpty {
                     eventSubject.send(.openSubscription(for: selectedNode))
                 } else {
                     eventSubject.send(.openPlans(.nodeWasMovedToPlan))
@@ -575,7 +575,7 @@ extension ConnectionModel {
                 switch subscriptionType {
                 case .node:
                     if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
-                        if self.subscription?.plan == 0 {
+                        if !selectedNode.price.isEmpty {
                             self.eventSubject.send(.resubscribeToNode(selectedNode))
                         } else {
                             self.eventSubject.send(.openPlans(.nodeWasMovedToPlan))
