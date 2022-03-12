@@ -80,9 +80,7 @@ extension SubscribedNodesViewModel {
                   return
               }
         
-        let planId = model.getPlanId()
-        
-        router.play(event: .details(sentinelNode, planId: planId, isSubscribed: true))
+        router.play(event: .details(sentinelNode, planId: nil, isSubscribed: true))
     }
     
     func delete(at offsets: IndexSet) {

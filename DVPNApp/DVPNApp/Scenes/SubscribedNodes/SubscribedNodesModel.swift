@@ -106,11 +106,6 @@ extension SubscribedNodesModel {
             }
         }
     }
-    
-    func getPlanId() -> UInt64? {
-        // TODO: need to be implemented
-        return nil
-    }
 }
 
 extension SubscribedNodesModel {
