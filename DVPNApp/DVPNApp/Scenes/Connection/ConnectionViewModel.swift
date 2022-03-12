@@ -35,8 +35,7 @@ final class ConnectionViewModel: ObservableObject {
         case warning(Error)
         case openSubscription(for: DVPNNodeInfo, delegate: NodeSubscriptionViewModelDelegate?)
         case dismiss(isEnabled: Bool)
-        case resubscribeToNode(completion: (Bool) -> Void)
-        case resubscribeToPlan(completion: (Bool) -> Void)
+        case alert(title: String, message: String?, completion: (Bool) -> Void)
     }
     
     private let model: ConnectionModel
@@ -79,7 +78,10 @@ final class ConnectionViewModel: ObservableObject {
                     router.play(event: .warning(error))
                 case let .resubscribeToNode(node):
                     router.play(
-                        event: .resubscribeToNode { [weak self] result in
+                        event: .alert(
+                            title: L10n.Connection.ResubscribeToNode.title,
+                            message: L10n.Connection.ResubscribeToNode.subtitle
+                        ) { [weak self] result in
                             guard let self = self, result else {
                                 return
                             }
@@ -89,7 +91,10 @@ final class ConnectionViewModel: ObservableObject {
                     )
                 case let .resubscribeToPlan(nodeAddress, planId):
                     router.play(
-                        event: .resubscribeToPlan { [weak self] result in
+                        event: .alert(
+                            title: L10n.Connection.ResubscribeToPlan.title,
+                            message: L10n.Connection.ResubscribeToPlan.subtitle
+                        ) { [weak self] result in
                             guard let self = self, result else {
                                 return
                             }

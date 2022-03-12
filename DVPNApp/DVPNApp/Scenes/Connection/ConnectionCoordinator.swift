@@ -47,16 +47,11 @@ extension ConnectionCoordinator: RouterType {
             ModulesFactory.shared.makeNodeSubscriptionModule(node: node, delegate: delegate, for: navigation)
         case let .dismiss(isEnabled):
             setBackNavigationEnability(isEnabled: isEnabled)
-        case let .resubscribeToNode(completion):
-            showResubscribeAlert(
-                title: L10n.Connection.ResubscribeToNode.title,
-                message: L10n.Connection.ResubscribeToNode.subtitle,
-                completion: completion
-            )
-        case let .resubscribeToPlan(completion: completion):
-            showResubscribeAlert(
-                title: L10n.Connection.ResubscribeToPlan.title,
-                message: L10n.Connection.ResubscribeToPlan.subtitle,
+        case let .alert(title, message, completion):
+            showAlert(
+                title: title,
+                message: message,
+                on: rootController,
                 completion: completion
             )
         }
@@ -70,28 +65,5 @@ extension ConnectionCoordinator {
         navigation?.interactivePopGestureRecognizer?.isEnabled = isEnabled
         navigation?.navigationBar.isUserInteractionEnabled = isEnabled
         navigation?.navigationBar.tintColor = isEnabled ? .white : .gray
-    }
-    
-    private func showResubscribeAlert(
-        title: String,
-        message: String,
-        completion: @escaping (Bool) -> Void
-    ) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(false)
-        }
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        rootController?.present(alert, animated: true, completion: nil)
     }
 }
