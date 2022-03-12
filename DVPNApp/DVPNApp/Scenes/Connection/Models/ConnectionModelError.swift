@@ -16,6 +16,7 @@ enum ConnectionModelError: LocalizedError {
     case notEnoughTokens
     
     case emptySubscriptions
+    case emptyNodesForPlan
 
     var errorDescription: String? {
         switch self {
@@ -31,6 +32,8 @@ enum ConnectionModelError: LocalizedError {
             return L10n.Connection.Error.notEnoughTokens
         case .emptySubscriptions:
             return L10n.Connection.Error.emptySubscriptions
+        case .emptyNodesForPlan:
+            return L10n.Connection.Error.emptyNodesForPlan
         }
     }
 }

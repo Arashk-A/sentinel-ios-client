@@ -249,7 +249,20 @@ extension ConnectionModel {
         }
         
         if subscription.plan != 0 {
-            #warning("TODO: set subscriptionType")
+            context.nodesService.loadNodesInfo(for: subscription.plan) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .failure(let error):
+                    self.show(error: error)
+                    return
+                case .success(let nodes):
+                    guard let node = nodes.first else {
+                        self.show(error: ConnectionModelError.emptyNodesForPlan)
+                        return
+                    }
+                    self.subscriptionType = .plan((node.address, subscription.plan))
+                }
+            }
         } else {
             self.subscriptionType = .node(subscription.node)
         }

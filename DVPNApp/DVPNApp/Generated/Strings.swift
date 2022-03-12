@@ -113,6 +113,8 @@ internal enum L10n {
       internal static let disconnect = L10n.tr("Localizable", "Connection.Button.Disconnect")
     }
     internal enum Error {
+      /// The plan do not have any nodes
+      internal static let emptyNodesForPlan = L10n.tr("Localizable", "Connection.Error.EmptyNodesForPlan")
       /// You do not have any subscriptions
       internal static let emptySubscriptions = L10n.tr("Localizable", "Connection.Error.EmptySubscriptions")
       /// Misconfigured nodes. Please, try again or select another node
