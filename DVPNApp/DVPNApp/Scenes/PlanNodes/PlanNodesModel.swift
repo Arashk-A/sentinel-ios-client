@@ -21,7 +21,9 @@ final class PlanNodesModel {
     typealias Context = HasNodesService & HasWalletService & HasSentinelService
     private let context: Context
     private let plan: SentinelPlan
-    private(set) var isSubscribed: Bool
+    private var isSubscribed: Bool
+
+    private var subscriptions: [SentinelWallet.Subscription] = []
 
     private let eventSubject = PassthroughSubject<PlanNodesModelEvent, Never>()
     var eventPublisher: AnyPublisher<PlanNodesModelEvent, Never> {
@@ -34,6 +36,8 @@ final class PlanNodesModel {
         self.context = context
         self.plan = plan
         self.isSubscribed = isSubscribed
+
+        subscribeToEvents()
     }
 }
 
@@ -69,6 +73,31 @@ extension PlanNodesModel {
             }
         }
     }
+
+    func cancelSubscription() {
+        let subscriptionsToCancel = subscriptions
+            .filter { $0.plan == plan.id }
+            .map { $0.id }
+
+        context.sentinelService.cancel(
+            subscriptions: subscriptionsToCancel,
+            node: plan.provider
+        ) { [weak self] result in
+                log.debug(result)
+
+                switch result {
+                case let .failure(error):
+                    self?.show(error: error)
+                case let .success(result):
+                    switch result.isSuccess {
+                    case true:
+                        self?.changeSubscriptionState(to: false)
+                    case false:
+                        self?.show(error: SubscribedNodesModelError.faliToCancelSubscription)
+                    }
+                }
+            }
+    }
 }
 
 // MARK: - Private Methods
@@ -77,6 +106,14 @@ extension PlanNodesModel {
     private func show(error: Error) {
         log.error(error)
         eventSubject.send(.error(error))
+    }
+
+    private func subscribeToEvents() {
+        context.nodesService.subscriptions
+            .sink(receiveValue: { [weak self] subscriptions in
+                self?.subscriptions = subscriptions
+            })
+            .store(in: &cancellables)
     }
 
     private func subscribe(to plan: SentinelPlan) {
@@ -95,10 +132,14 @@ extension PlanNodesModel {
                     return
                 }
 
-                self.context.nodesService.loadActiveSubscriptions(completion: { _ in })
-                self.isSubscribed = true
-                self.eventSubject.send(.changeState(isSubscribed: true))
+                self.changeSubscriptionState(to: true)
             }
         }
+    }
+
+    private func changeSubscriptionState(to isSubscribed: Bool) {
+        context.nodesService.loadActiveSubscriptions(completion: { _ in })
+        self.isSubscribed = isSubscribed
+        eventSubject.send(.changeState(isSubscribed: isSubscribed))
     }
 }

@@ -59,7 +59,7 @@ extension PlanNodesViewModel {
         }
         
         router.play(
-            event: .details(sentinelNode, isSubscribed: model.isSubscribed)
+            event: .details(sentinelNode, isSubscribed: isSubscribed)
         )
     }
 
@@ -135,13 +135,14 @@ extension PlanNodesViewModel {
     private func didTapCancelSubscription() {
         router.play(
             event: .alert(
-                title: L10n.Plans.Subscribe.title("plan #\(plan.id)"),
+                title: L10n.SubscribedNodes.CancelSubscription.title("plan #\(plan.id)"),
                 message: nil
             ) { [weak self] result in
                 guard let self = self, result else {
                     return
                 }
                 self.isLoading = true
+                self.model.cancelSubscription()
             }
         )
     }
