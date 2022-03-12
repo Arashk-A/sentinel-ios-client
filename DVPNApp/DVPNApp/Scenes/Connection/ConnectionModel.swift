@@ -23,10 +23,12 @@ enum ConnectionModelEvent {
     case updateBandwidth(bandwidth: Bandwidth)
     case updateTimer(startDate: Date?)
     
-    /// When the quota is over
+    /// When node quota is over
     case openSubscription(for: DVPNNodeInfo)
+    /// When plan quota is over
+    case openPlans
     case resubscribeToNode(DVPNNodeInfo)
-    case resubscribeToPlan(nodeAddress: String, planId: UInt64)
+    case resubscribeToPlan
 }
 
 enum SubscriptionType {
@@ -182,7 +184,7 @@ extension ConnectionModel {
                 }
                 eventSubject.send(.openSubscription(for: selectedNode))
             case .plan:
-                #warning("TODO: no quota, resubscribe to plan")
+                eventSubject.send(.openPlans)
             }
             
             eventSubject.send(.updateConnection(status: .disconnected))
@@ -563,9 +565,9 @@ extension ConnectionModel {
                     }
                     
                     self.show(error: error)
-                case let .plan((nodeAddress, planId)):
+                case .plan:
                     if let afError = error.asAFError, afError.isSessionTaskError {
-                        self.eventSubject.send(.resubscribeToPlan(nodeAddress: nodeAddress, planId: planId))
+                        self.eventSubject.send(.resubscribeToPlan)
                         self.stopLoading()
                         return
                     }

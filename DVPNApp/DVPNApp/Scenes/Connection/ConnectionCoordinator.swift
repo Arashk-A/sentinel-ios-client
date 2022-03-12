@@ -45,6 +45,20 @@ extension ConnectionCoordinator: RouterType {
             show(message: error.localizedDescription, theme: .warning)
         case let .openSubscription(node, delegate):
             ModulesFactory.shared.makeNodeSubscriptionModule(node: node, delegate: delegate, for: navigation)
+        case let .openPlans(title, message):
+            showAlert(
+                title: title,
+                message: message,
+                on: rootController,
+                completion: { result in
+                    guard result else {
+                        return
+                    }
+                    
+                    navigation.popToRootViewController(animated: true)
+                    ModulesFactory.shared.switchTo(tab: .plans)
+                }
+            )
         case let .dismiss(isEnabled):
             setBackNavigationEnability(isEnabled: isEnabled)
         case let .alert(title, message, completion):

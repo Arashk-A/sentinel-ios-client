@@ -149,8 +149,14 @@ internal enum L10n {
     internal enum ResubscribeToPlan {
       /// Do you want to resubscribe?
       internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToPlan.Subtitle")
-      /// All data is used or plan expired
-      internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.Title")
+      internal enum QuotaLeft {
+        /// All data is used
+        internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.QuotaLeft.Title")
+      }
+      internal enum QuotaLeftOrPlanExpired {
+        /// All data is used or plan expired
+        internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.QuotaLeftOrPlanExpired.Title")
+      }
     }
     internal enum Status {
       internal enum Connection {

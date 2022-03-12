@@ -34,6 +34,7 @@ final class ConnectionViewModel: ObservableObject {
         case error(Error)
         case warning(Error)
         case openSubscription(for: DVPNNodeInfo, delegate: NodeSubscriptionViewModelDelegate?)
+        case openPlans(title: String, message: String)
         case dismiss(isEnabled: Bool)
         case alert(title: String, message: String?, completion: (Bool) -> Void)
     }
@@ -74,6 +75,13 @@ final class ConnectionViewModel: ObservableObject {
                     self?.show(error: error)
                 case let .openSubscription(node):
                     router.play(event: .openSubscription(for: node, delegate: self))
+                case .openPlans:
+                    router.play(
+                        event: .openPlans(
+                            title: L10n.Connection.ResubscribeToPlan.QuotaLeft.title,
+                            message: L10n.Connection.ResubscribeToPlan.subtitle
+                        )
+                    )
                 case let .warning(error):
                     router.play(event: .warning(error))
                 case let .resubscribeToNode(node):
@@ -89,18 +97,12 @@ final class ConnectionViewModel: ObservableObject {
                             router.play(event: .openSubscription(for: node, delegate: self))
                         }
                     )
-                case let .resubscribeToPlan(nodeAddress, planId):
+                case .resubscribeToPlan:
                     router.play(
-                        event: .alert(
-                            title: L10n.Connection.ResubscribeToPlan.title,
+                        event: .openPlans(
+                            title: L10n.Connection.ResubscribeToPlan.QuotaLeftOrPlanExpired.title,
                             message: L10n.Connection.ResubscribeToPlan.subtitle
-                        ) { [weak self] result in
-                            guard let self = self, result else {
-                                return
-                            }
-                            
-                            #warning("TODO: resubscribe to plan")
-                        }
+                        )
                     )
                 }
             }

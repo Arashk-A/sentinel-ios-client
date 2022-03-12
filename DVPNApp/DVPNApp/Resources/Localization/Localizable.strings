@@ -61,8 +61,9 @@
 "Connection.Error.EmptySubscriptions" = "You do not have any subscriptions";
 "Connection.ResubscribeToNode.Title" = "All data used";
 "Connection.ResubscribeToNode.Subtitle" = "Data update is pending, but it seems you used all data. Do you want to resubscribe?";
-"Connection.ResubscribeToPlan.Title" = "All data is used or plan expired";
+"Connection.ResubscribeToPlan.QuotaLeftOrPlanExpired.Title" = "All data is used or plan expired";
 "Connection.ResubscribeToPlan.Subtitle" = "Do you want to resubscribe?";
+"Connection.ResubscribeToPlan.QuotaLeft.Title" = "All data is used";
 
 "Home.Node.Details.Price" = "Price";
 "Home.Node.Details.Latency" = "Latency";
