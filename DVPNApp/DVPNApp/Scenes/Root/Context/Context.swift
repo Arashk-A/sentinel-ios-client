@@ -64,7 +64,9 @@ final class CommonContext {
         
         userService = UserService(walletService: walletService)
         nodesService = NodesService(sentinelService: sentinelService)
+        nodesService.loadAllNodesIfNeeded { _ in }
         preloadService = PreloadService(userService: userService)
+        preloadService.loadData {}
     }
 }
 
