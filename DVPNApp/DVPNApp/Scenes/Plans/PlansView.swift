@@ -1,100 +1,70 @@
 //
 //  PlansView.swift
-//  Test
+//  DVPNApp
 //
-//  Created by Aleksandr Litreev on 12.08.2021.
+//  Created by Lika Vorobeva on 09.03.2022.
 //
 
+import Foundation
 import SwiftUI
+import UIKit
+import FlagKit
 
 struct PlansView: View {
-    
     @ObservedObject private var viewModel: PlansViewModel
 
     init(viewModel: PlansViewModel) {
         self.viewModel = viewModel
     }
-    
-    var bandwidthView: some View {
-        VStack(spacing: 0) {
-            Text("\(viewModel.gbToBuy)")
-                .applyTextStyle(.whiteMain(ofSize: 44, weight: .bold))
-            
-            Text(L10n.Common.gb)
-                .applyTextStyle(.lightGrayMain(ofSize: 18, weight: .regular))
-        }
-        .frame(width: 140, height: 140)
-        .overlay(
-            RoundedRectangle(cornerRadius: 70)
-                .stroke(Asset.Colors.navyBlue.color.asColor, lineWidth: 6)
-        )
-    }
-    
-    var mainButton: some View {
-        Button(action: viewModel.didTapSubscribe) {
-            ZStack(alignment: .leading) {
-                if viewModel.isLoading {
-                    ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
-                        .frame(width: 15, height: 15)
-                }
-                HStack {
-                    Text(L10n.Plans.subscribe)
-                        .applyTextStyle(.mainButton)
-                }
-                .frame(maxWidth: .infinity)
-            }
-        }
-        .padding()
-        .background(Asset.Colors.navyBlue.color.asColor)
-        .cornerRadius(5)
-        .disabled(viewModel.isLoading)
-    }
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
+            if !viewModel.isLoading && viewModel.options.isEmpty {
+                Spacer()
+
+                Text(L10n.Plans.empty)
+                    .applyTextStyle(.whiteMain(ofSize: 18, weight: .semibold))
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+
+            plansView
+
             Spacer()
-
-            Button(action: viewModel.didTapCrossButton) {
-                Image(systemName: "multiply")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-                    .foregroundColor(.white)
-            }
-
-            VStack(spacing: 0) {
-                VStack {
-                    Text(L10n.Plans.title)
-                        .applyTextStyle(.whiteMain(ofSize: 18, weight: .semibold))
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding()
-
-                    bandwidthView
-                }
-                .padding()
-
-                VStack {
-                    CounterView(
-                        text: $viewModel.prettyTokesToSpend,
-                        togglePlus: viewModel.togglePlus,
-                        toggleMinus: viewModel.toggleMinus
-                    )
-
-                    mainButton
-                        .padding()
-                }
-                .padding()
-            }
-            .background(Asset.Colors.accentColor.color.asColor)
-            .overlay(
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(Asset.Colors.lightBlue.color.asColor, lineWidth: 1)
-            )
-            .padding(.all, 28)
-            .padding(.bottom)
         }
-        .frame(maxWidth: .infinity)
-        .background(Asset.Colors.accentColor.color.asColor.opacity(0.85))
-        .edgesIgnoringSafeArea(.bottom)
+        .background(Asset.Colors.accentColor.color.asColor)
+        .onAppear(perform: viewModel.viewWillAppear)
+    }
+}
+
+extension PlansView {
+    var plansView: some View {
+        ScrollView {
+            if viewModel.isLoading {
+                ActivityIndicator(isAnimating: $viewModel.isLoading, style: .medium)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .padding()
+            }
+
+            VStack(alignment: .leading, spacing: 15) {
+                ForEach(Array(zip(viewModel.options.chunked(into: 2).indices, viewModel.options.chunked(into: 2))), id: \.0) { index, models in
+                    HStack(spacing: 15) {
+                        ForEach(models, id: \.self) { model in
+                            PlanOptionView(
+                                model: model,
+                                action: { viewModel.togglePlan(vm: model) }
+                            )
+                        }
+                    }
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+struct PlansView_Previews: PreviewProvider {
+    static var previews: some View {
+        ModulesFactory.shared.getPlansScene()
     }
 }

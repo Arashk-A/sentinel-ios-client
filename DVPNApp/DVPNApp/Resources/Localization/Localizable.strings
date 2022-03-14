@@ -6,6 +6,7 @@
 
 "TabBar.Item.Continents" = "All nodes";
 "TabBar.Item.SubscribedNodes" = "Subscribed";
+"TabBar.Item.Plans" = "Plans";
 "TabBar.Item.Account" = "My Account";
 "TabBar.Item.Extra" = "Extras";
 
@@ -57,8 +58,15 @@
 "Connection.Error.SignatureGenerationFailed" = "Misconfigured wallet. Please, try again or re-import your mnemonic";
 "Connection.Error.InvalidURL" = "Misconfigured nodes. Please, try again or select another node";
 "Connection.Error.NotEnoughTokens" = "Not enough points to broadcast - you'll need at least 0.01 points on your account. Please, check your balance and try again later";
-"Connection.Resubscribe.Title" = "All data used";
-"Connection.Resubscribe.Subtitle" = "Data update is pending, but it seems you used all data. Do you want to resubscribe?";
+"Connection.Error.EmptySubscriptions" = "You do not have any subscriptions";
+"Connection.Error.EmptyNodesForPlan" = "The plan do not have any nodes";
+"Connection.ResubscribeToNode.Title" = "All data used";
+"Connection.ResubscribeToNode.Subtitle" = "Data update is pending, but it seems you used all data. Do you want to resubscribe?";
+"Connection.ResubscribeToPlan.QuotaLeftOrPlanExpired.Title" = "All data is used or plan expired";
+"Connection.ResubscribeToPlan.QuotaLeft.Title" = "All data is used";
+"Connection.ResubscribeToPlan.NodeWasMovedToPlan.Title" = "All data is used";
+"Connection.ResubscribeToPlan.Subtitle" = "Do you want to resubscribe?";
+"Connection.ResubscribeToPlan.NodeWasMovedToPlan.Subtitle" = "The node is in a plan now. Do you want to subscribe?";
 
 "Home.Node.Details.Price" = "Price";
 "Home.Node.Details.Latency" = "Latency";
@@ -144,3 +152,14 @@
 "Purchases.Button.Buy" = "Buy now";
 "Purchases.Warning.Cancelled" = "Purchase was canceled.";
 "Purchases.Info.Completed" = "Purchase is succefully made.";
+
+"Plans.Title" = "Plans";
+"Plans.Empty" = "No plans are available at the moment";
+"Plans.Item.Subscribed" = "Subscribed";
+"Plans.Item.Available" = "Available";
+
+"Plans.Nodes.Title" = "Nodes";
+"Plans.Nodes.Button.Subscribe" = "Subscribe";
+"Plans.Nodes.Button.Cancel" = "Cancel subscription";
+"Plans.Info.Subscribed" = "You are now subscribed to this plan!";
+"Plans.Info.Unsubscribed" = "Your subscription is cancelled!";

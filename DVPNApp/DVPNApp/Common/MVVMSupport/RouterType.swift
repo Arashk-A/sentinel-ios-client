@@ -7,8 +7,7 @@
 
 import Foundation
 import SwiftMessages
-
-import class UIKit.UIViewController
+import UIKit
 
 protocol RouterType {
     associatedtype Event
@@ -41,6 +40,34 @@ extension RouterType {
         config.presentationContext = presentationContext
 
         SwiftMessages.show(config: config, view: view)
+    }
+
+    func showAlert(
+        title: String,
+        message: String? = nil,
+        on navigation: UIViewController?,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+
+        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
+            UIImpactFeedbackGenerator.lightFeedback()
+            completion(true)
+        }
+
+        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
+            UIImpactFeedbackGenerator.lightFeedback()
+            completion(false)
+        }
+
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+
+        navigation?.present(alert, animated: true, completion: nil)
     }
 }
 

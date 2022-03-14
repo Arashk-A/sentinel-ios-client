@@ -43,12 +43,31 @@ extension ConnectionCoordinator: RouterType {
             show(message: error.localizedDescription)
         case .warning(let error):
             show(message: error.localizedDescription, theme: .warning)
-        case let .openPlans(node, delegate):
-            ModulesFactory.shared.makePlansModule(node: node, delegate: delegate, for: navigation)
+        case let .openSubscription(node, delegate):
+            ModulesFactory.shared.makeNodeSubscriptionModule(node: node, delegate: delegate, for: navigation)
+        case let .openPlans(title, message):
+            showAlert(
+                title: title,
+                message: message,
+                on: rootController,
+                completion: { result in
+                    guard result else {
+                        return
+                    }
+                    
+                    navigation.popToRootViewController(animated: true)
+                    ModulesFactory.shared.switchTo(tab: .plans)
+                }
+            )
         case let .dismiss(isEnabled):
             setBackNavigationEnability(isEnabled: isEnabled)
-        case let .resubscribe(completion):
-            showResubscribeAlert(completion: completion)
+        case let .alert(title, message, completion):
+            showAlert(
+                title: title,
+                message: message,
+                on: rootController,
+                completion: completion
+            )
         }
     }
 }
@@ -60,28 +79,5 @@ extension ConnectionCoordinator {
         navigation?.interactivePopGestureRecognizer?.isEnabled = isEnabled
         navigation?.navigationBar.isUserInteractionEnabled = isEnabled
         navigation?.navigationBar.tintColor = isEnabled ? .white : .gray
-    }
-    
-    private func showResubscribeAlert(completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(
-            title: L10n.Connection.Resubscribe.title,
-            message: L10n.Connection.Resubscribe.subtitle,
-            preferredStyle: .alert
-        )
-
-        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(false)
-        }
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        rootController?.present(alert, animated: true, completion: nil)
     }
 }

@@ -30,7 +30,7 @@ final class SubscribedNodesViewModel: ObservableObject {
 
     enum Route {
         case error(Error)
-        case details(SentinelNode, isSubscribed: Bool)
+        case details(SentinelNode, planId: UInt64?, isSubscribed: Bool)
         case info(String)
     }
     
@@ -80,7 +80,7 @@ extension SubscribedNodesViewModel {
                   return
               }
         
-        router.play(event: .details(sentinelNode, isSubscribed: true))
+        router.play(event: .details(sentinelNode, planId: nil, isSubscribed: true))
     }
     
     func delete(at offsets: IndexSet) {

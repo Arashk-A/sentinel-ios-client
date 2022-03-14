@@ -11,13 +11,13 @@ import SwiftMessages
 
 final class AvailableNodesCoordinator: CoordinatorType {
     private let context: AvailableNodesModel.Context
-    private weak var delegate: PlansViewModelDelegate?
+    private weak var delegate: NodeSubscriptionViewModelDelegate?
     private weak var navigation: UINavigationController?
     private let continent: Continent
 
     init(
         context: AvailableNodesModel.Context,
-        delegate: PlansViewModelDelegate?,
+        delegate: NodeSubscriptionViewModelDelegate?,
         navigation: UINavigationController,
         continent: Continent
     ) {
@@ -62,7 +62,7 @@ extension AvailableNodesCoordinator: RouterType {
         case let .details(node, isSubscribed):
             ModulesFactory.shared.makeNodeDetailsModule(
                 for: navigation,
-                configuration: .init(node: node, isSubscribed: isSubscribed)
+                   configuration: .init(node: node, planId: nil, isSubscribed: isSubscribed)
             )
         }
     }

@@ -22,23 +22,36 @@ final class NodeDetailsModel {
         eventSubject.eraseToAnyPublisher()
     }
     
-    private let node: SentinelNode
-    let isSubscribed: Bool
+    struct Configuration {
+        let node: SentinelNode
+        let planId: UInt64?
+        let isSubscribed: Bool
+    }
+    
+    private let configuration: Configuration
 
-    init(context: Context, node: SentinelNode, isSubscribed: Bool) {
+    init(context: Context, configuration: Configuration) {
         self.context = context
-        self.node = node
-        self.isSubscribed = isSubscribed
+        self.configuration = configuration
     }
 }
 
 extension NodeDetailsModel {
-    func refresh() {
-        self.eventSubject.send(.update(node: node))
+    func setNode() {
+        eventSubject.send(.update(node: configuration.node))
     }
     
     func save(nodeAddress: String) {
         context.connectionInfoStorage.set(lastSelectedNode: nodeAddress)
+        context.connectionInfoStorage.set(lastSelectedPlanId: configuration.planId)
         context.connectionInfoStorage.set(shouldConnect: true)
+    }
+    
+    var isSubscribed: Bool {
+        configuration.isSubscribed
+    }
+
+    var connectionAllowed: Bool {
+        !(configuration.planId != nil && !isSubscribed)
     }
 }

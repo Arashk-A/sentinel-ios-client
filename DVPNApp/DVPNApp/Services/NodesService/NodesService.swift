@@ -165,7 +165,24 @@ extension NodesService: NodesServiceType {
                     return
                 }
                 
-                self.loadNodes(from: Set(subscriptions.map { $0.node }))
+                let addresses = Set(subscriptions.map { $0.node }.filter { !$0.isEmpty })
+                self.loadNodes(from: addresses)
+            }
+        }
+    }
+
+    func loadNodesInfo(
+        for plan: UInt64,
+        completion: @escaping (Result<[SentinelNode], Error>) -> Void
+    ) {
+        sentinelService.queryNodesForPlan(with: plan) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                log.error(error)
+                completion(.failure(NodesServiceError.failToLoadData))
+            case .success(let nodes):
+                self.loadInfo(for: nodes, completion: completion)
             }
         }
     }
@@ -234,7 +251,7 @@ extension NodesService {
         for sentinelNode: SentinelNode,
         completion: @escaping (Result<Node, Error>) -> Void
     ) {
-        self.sentinelService.fetchInfo(
+        sentinelService.fetchInfo(
             for: sentinelNode, timeout: constants.timeout
         ) { [weak self] result in
             guard let self = self else { return }
@@ -270,6 +287,43 @@ extension NodesService {
                     self._subscribedNodes.append(node)
                 }
             }
+        }
+    }
+    
+    private func loadNodeInfo(for planID: UInt64) {
+        sentinelService.queryNodesForPlan(with: planID) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .failure(let error):
+                log.error(error)
+            case .success(let sentinelNodes):
+                self.loadNodes(from: Set(sentinelNodes.map { $0.address }))
+            }
+        }
+    }
+
+    private func loadInfo(
+        for sentinelNodes: [SentinelNode],
+        completion: @escaping (Result<[SentinelNode], Error>) -> Void
+    ) {
+        let group = DispatchGroup()
+        var loadedNodes: [SentinelNode] = []
+
+        sentinelNodes.forEach { sentinelNode in
+            group.enter()
+
+            sentinelService.fetchInfo(for: sentinelNode, timeout: constants.timeout) { result in
+                if case let .success(node) = result {
+                    loadedNodes.append(sentinelNode.set(node: node))
+                }
+
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            completion(.success(loadedNodes))
         }
     }
 }

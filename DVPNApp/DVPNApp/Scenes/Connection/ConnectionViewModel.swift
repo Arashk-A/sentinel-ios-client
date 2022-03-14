@@ -33,9 +33,10 @@ final class ConnectionViewModel: ObservableObject {
     enum Route {
         case error(Error)
         case warning(Error)
-        case openPlans(for: DVPNNodeInfo, delegate: PlansViewModelDelegate?)
+        case openSubscription(for: DVPNNodeInfo, delegate: NodeSubscriptionViewModelDelegate?)
+        case openPlans(title: String, message: String)
         case dismiss(isEnabled: Bool)
-        case resubscribe(completion: (Bool) -> Void)
+        case alert(title: String, message: String?, completion: (Bool) -> Void)
     }
     
     private let model: ConnectionModel
@@ -72,18 +73,28 @@ final class ConnectionViewModel: ObservableObject {
                     self?.router.play(event: .dismiss(isEnabled: !isLoading))
                 case let .error(error):
                     self?.show(error: error)
-                case let .openPlans(node):
-                    router.play(event: .openPlans(for: node, delegate: self))
+                case let .openSubscription(node):
+                    router.play(event: .openSubscription(for: node, delegate: self))
+                case let .openPlans(plansOpeningReason):
+                    router.play(
+                        event: .openPlans(
+                            title: plansOpeningReason.title,
+                            message: plansOpeningReason.message
+                        )
+                    )
                 case let .warning(error):
                     router.play(event: .warning(error))
-                case let .resubscribe(node):
+                case let .resubscribeToNode(node):
                     router.play(
-                        event: .resubscribe { [weak self] result in
+                        event: .alert(
+                            title: L10n.Connection.ResubscribeToNode.title,
+                            message: L10n.Connection.ResubscribeToNode.subtitle
+                        ) { [weak self] result in
                             guard let self = self, result else {
                                 return
                             }
                             
-                            router.play(event: .openPlans(for: node, delegate: self))
+                            router.play(event: .openSubscription(for: node, delegate: self))
                         }
                     )
                 }
@@ -113,9 +124,9 @@ extension ConnectionViewModel {
     }
 }
 
-// MARK: - PlansViewModelDelegate
+// MARK: - NodeSubscriptionViewModelDelegate
 
-extension ConnectionViewModel: PlansViewModelDelegate {
+extension ConnectionViewModel: NodeSubscriptionViewModelDelegate {
     func openConnection() {
         model.checkNodeForUpdate()
     }

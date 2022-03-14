@@ -18,7 +18,7 @@ final class NodeDetailsViewModel: ObservableObject {
 
     enum Route {
         case error(Error)
-        case subscribe(node: DVPNNodeInfo, delegate: PlansViewModelDelegate)
+        case subscribe(node: DVPNNodeInfo, delegate: NodeSubscriptionViewModelDelegate)
         case dismiss
         case connect
     }
@@ -27,6 +27,10 @@ final class NodeDetailsViewModel: ObservableObject {
     @Published private(set) var nodeInfoViewModels: [NodeInfoViewModel] = []
     
     @Published private(set) var node: Node?
+
+    var connectionAllowed: Bool {
+        model.connectionAllowed
+    }
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -46,7 +50,7 @@ final class NodeDetailsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        model.refresh()
+        model.setNode()
     }
 }
 
@@ -104,9 +108,9 @@ extension NodeDetailsViewModel {
     }
 }
 
-// MARK: - PlansViewModelDelegate
+// MARK: - NodeSubscriptionViewModelDelegate
 
-extension NodeDetailsViewModel: PlansViewModelDelegate {
+extension NodeDetailsViewModel: NodeSubscriptionViewModelDelegate {
     func openConnection() {
         router.play(event: .dismiss)
     }

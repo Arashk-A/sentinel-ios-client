@@ -39,10 +39,16 @@ extension SubscribedNodesCoordinator: RouterType {
         switch event {
         case let .error(error):
             show(message: error.localizedDescription)
-        case let .details(node, isSubscribed):
+        case let .details(node, planId, isSubscribed):
+            let configuration = NodeDetailsCoordinator.Configuration(
+                node: node,
+                planId: planId,
+                isSubscribed: isSubscribed
+            )
+            
             ModulesFactory.shared.makeNodeDetailsModule(
                 for: navigation,
-                   configuration: .init(node: node, isSubscribed: isSubscribed)
+                configuration: configuration
             )
         case let .info(message):
             show(message: message, theme: .success)

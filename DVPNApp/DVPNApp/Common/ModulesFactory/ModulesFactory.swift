@@ -102,12 +102,12 @@ extension ModulesFactory {
         ExtraCoordinator(context: context, navigation: navigation).start()
     }
 
-    func makePlansModule(
+    func makeNodeSubscriptionModule(
         node: DVPNNodeInfo,
-        delegate: PlansViewModelDelegate?,
+        delegate: NodeSubscriptionViewModelDelegate?,
         for navigation: UINavigationController
     ) {
-        PlansCoordinator(context: context, navigation: navigation, node: node, delegate: delegate).start()
+        NodeSubscriptionCoordinator(context: context, navigation: navigation, node: node, delegate: delegate).start()
     }
 
     func makeDNSSettingsModule(
@@ -120,7 +120,7 @@ extension ModulesFactory {
     
     func makeAvailableNodesModule(
         continent: Continent,
-        delegate: PlansViewModelDelegate?,
+        delegate: NodeSubscriptionViewModelDelegate?,
         for navigation: UINavigationController
     ) {
         AvailableNodesCoordinator(
@@ -137,6 +137,19 @@ extension ModulesFactory {
 
     func makePurchasesModule(for navigation: UINavigationController) {
         PurchasesCoordinator(context: context, navigation: navigation).start()
+    }
+
+    func makePlansModule(for navigation: UINavigationController) {
+        PlansCoordinator(context: context, navigation: navigation).start()
+    }
+
+    func makePlanNodesModule(plan: SentinelPlan, isSubscribed: Bool, for navigation: UINavigationController) {
+        PlanNodesCoordinator(
+            context: context,
+            navigation: navigation,
+            plan: plan,
+            isSubscribed: isSubscribed
+        ).start()
     }
 
     func switchTo(tab: TabType) {
@@ -249,12 +262,12 @@ extension ModulesFactory {
         return view
     }
 
-//    func getPlansScene() -> PlansView {
-//        let coordinator = PlansCoordinator(context: context, navigation: UINavigationController(), node: nil)
-//        let model = PlansModel(context: context, node: nil)
-//        let viewModel = PlansViewModel(model: model, router: coordinator.asRouter())
-//        let view = PlansView(viewModel: viewModel)
-//
-//        return view
-//    }
+    func getPlansScene() -> PlansView {
+        let coordinator = PlansCoordinator(context: context, navigation: UINavigationController()).asRouter()
+        let model = PlansModel(context: context)
+        let viewModel = PlansViewModel(model: model, router: coordinator)
+        let view = PlansView(viewModel: viewModel)
+
+        return view
+    }
 }

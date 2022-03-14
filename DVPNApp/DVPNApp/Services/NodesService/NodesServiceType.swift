@@ -18,6 +18,7 @@ protocol NodesServiceType {
     func loadAllNodes(completion: ((Result<[SentinelNode], Error>) -> Void)?)
     func loadNodesInfo(for continent: Continent)
     func loadNodesInfo(for nodes: [SentinelNode])
+    func loadNodesInfo(for plan: UInt64, completion: @escaping (Result<[SentinelNode], Error>) -> Void)
     var nodesInContinentsCount: [Continent: Int] { get }
     func loadActiveSubscriptions(completion: @escaping ((Result<[Subscription], Error>) -> Void))
     

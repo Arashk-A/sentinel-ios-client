@@ -2,114 +2,45 @@
 //  PlansCoordinator.swift
 //  DVPNApp
 //
-//  Created by Lika Vorobyeva on 12.08.2021.
+//  Created by Lika Vorobeva on 09.03.2022.
 //
 
+import UIKit
 import SwiftUI
 import SentinelWallet
+
 
 final class PlansCoordinator: CoordinatorType {
     private weak var navigation: UINavigationController?
     private weak var rootController: UIViewController?
 
     private let context: PlansModel.Context
-    private let node: DVPNNodeInfo
-    private weak var delegate: PlansViewModelDelegate?
 
-    init(
-        context: PlansModel.Context,
-        navigation: UINavigationController,
-        node: DVPNNodeInfo,
-        delegate: PlansViewModelDelegate?
-    ) {
+    init(context: PlansModel.Context, navigation: UINavigationController) {
         self.context = context
         self.navigation = navigation
-        self.node = node
-        self.delegate = delegate
     }
 
     func start() {
-        let addTokensModel = PlansModel(context: context, node: node)
-        let addTokensViewModel = PlansViewModel(model: addTokensModel, router: asRouter(), delegate: delegate)
-        let addTokensView = PlansView(viewModel: addTokensViewModel)
-        let controller = UIHostingController(rootView: addTokensView)
-        controller.view.backgroundColor = .clear
-        controller.modalPresentationStyle = .overFullScreen
-
+        let model = PlansModel(context: context)
+        let viewModel = PlansViewModel(model: model, router: asRouter())
+        let view = PlansView(viewModel: viewModel)
+        let controller = UIHostingController(rootView: view)
         rootController = controller
-
-        navigation?.present(controller, animated: false)
+        navigation?.pushViewController(controller, animated: true)
+        controller.makeNavigationBar(hidden: false, animated: false)
+        controller.title = L10n.Plans.title
     }
 }
-
-// MARK: - Handle events
 
 extension PlansCoordinator: RouterType {
     func play(event: PlansViewModel.Route) {
+        guard let navigation = navigation else { return }
         switch event {
         case let .error(error):
             show(message: error.localizedDescription)
-        case let .addTokensAlert(completion: completion):
-            showNotEnoughTokensAlert(completion: completion)
-        case let .subscribe(node, completion):
-            showSubscribeAlert(name: node, completion: completion)
-        case .accountInfo:
-            navigation?.dismiss(animated: true) { ModulesFactory.shared.switchTo(tab: .account) }
-        case .close:
-            navigation?.dismiss(animated: true)
+        case let .open(plan, isSubscribed):
+            ModulesFactory.shared.makePlanNodesModule(plan: plan, isSubscribed: isSubscribed, for: navigation)
         }
-    }
-}
-
-// MARK: - Private
-
-extension PlansCoordinator {
-    private func showSubscribeAlert(
-        name: String,
-        completion: @escaping (Bool) -> Void
-    ) {
-        let alert = UIAlertController(
-            title: L10n.Plans.Subscribe.title(name),
-            message: nil,
-            preferredStyle: .alert
-        )
-
-        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(false)
-        }
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        rootController?.present(alert, animated: true, completion: nil)
-    }
-
-    private func showNotEnoughTokensAlert(completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(
-            title: L10n.Plans.AddTokens.title,
-            message: L10n.Plans.AddTokens.subtitle,
-            preferredStyle: .alert
-        )
-
-        let okAction = UIAlertAction(title: L10n.Common.yes, style: .default) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: L10n.Common.cancel, style: .destructive) { _ in
-            UIImpactFeedbackGenerator.lightFeedback()
-            completion(false)
-        }
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-
-        rootController?.present(alert, animated: true, completion: nil)
     }
 }

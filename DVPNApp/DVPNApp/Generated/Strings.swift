@@ -113,6 +113,10 @@ internal enum L10n {
       internal static let disconnect = L10n.tr("Localizable", "Connection.Button.Disconnect")
     }
     internal enum Error {
+      /// The plan do not have any nodes
+      internal static let emptyNodesForPlan = L10n.tr("Localizable", "Connection.Error.EmptyNodesForPlan")
+      /// You do not have any subscriptions
+      internal static let emptySubscriptions = L10n.tr("Localizable", "Connection.Error.EmptySubscriptions")
       /// Misconfigured nodes. Please, try again or select another node
       internal static let invalidURL = L10n.tr("Localizable", "Connection.Error.InvalidURL")
       /// Not enough points to broadcast - you'll need at least 0.01 points on your account. Please, check your balance and try again later
@@ -138,11 +142,29 @@ internal enum L10n {
       /// Fetching the node info
       internal static let fetching = L10n.tr("Localizable", "Connection.LocationSelector.Fetching")
     }
-    internal enum Resubscribe {
+    internal enum ResubscribeToNode {
       /// Data update is pending, but it seems you used all data. Do you want to resubscribe?
-      internal static let subtitle = L10n.tr("Localizable", "Connection.Resubscribe.Subtitle")
+      internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToNode.Subtitle")
       /// All data used
-      internal static let title = L10n.tr("Localizable", "Connection.Resubscribe.Title")
+      internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToNode.Title")
+    }
+    internal enum ResubscribeToPlan {
+      /// Do you want to resubscribe?
+      internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToPlan.Subtitle")
+      internal enum NodeWasMovedToPlan {
+        /// The node is in a plan now. Do you want to subscribe?
+        internal static let subtitle = L10n.tr("Localizable", "Connection.ResubscribeToPlan.NodeWasMovedToPlan.Subtitle")
+        /// All data is used
+        internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.NodeWasMovedToPlan.Title")
+      }
+      internal enum QuotaLeft {
+        /// All data is used
+        internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.QuotaLeft.Title")
+      }
+      internal enum QuotaLeftOrPlanExpired {
+        /// All data is used or plan expired
+        internal static let title = L10n.tr("Localizable", "Connection.ResubscribeToPlan.QuotaLeftOrPlanExpired.Title")
+      }
     }
     internal enum Status {
       internal enum Connection {
@@ -304,9 +326,11 @@ internal enum L10n {
   }
 
   internal enum Plans {
+    /// No plans are available at the moment
+    internal static let empty = L10n.tr("Localizable", "Plans.Empty")
     /// SUBSCRIBE
     internal static let subscribe = L10n.tr("Localizable", "Plans.Subscribe")
-    /// How much points do you want to spend?
+    /// Plans
     internal static let title = L10n.tr("Localizable", "Plans.Title")
     internal enum AddTokens {
       /// Top-up your wallet?
@@ -318,6 +342,28 @@ internal enum L10n {
       internal enum Payment {
         /// Your transaction was unsuccessful. Please try again.
         internal static let failed = L10n.tr("Localizable", "Plans.Error.Payment.Failed")
+      }
+    }
+    internal enum Info {
+      /// You are now subscribed to this plan!
+      internal static let subscribed = L10n.tr("Localizable", "Plans.Info.Subscribed")
+      /// Your subscription is cancelled!
+      internal static let unsubscribed = L10n.tr("Localizable", "Plans.Info.Unsubscribed")
+    }
+    internal enum Item {
+      /// Available
+      internal static let available = L10n.tr("Localizable", "Plans.Item.Available")
+      /// Subscribed
+      internal static let subscribed = L10n.tr("Localizable", "Plans.Item.Subscribed")
+    }
+    internal enum Nodes {
+      /// Nodes
+      internal static let title = L10n.tr("Localizable", "Plans.Nodes.Title")
+      internal enum Button {
+        /// Cancel subscription
+        internal static let cancel = L10n.tr("Localizable", "Plans.Nodes.Button.Cancel")
+        /// Subscribe
+        internal static let subscribe = L10n.tr("Localizable", "Plans.Nodes.Button.Subscribe")
       }
     }
     internal enum Subscribe {
@@ -404,6 +450,8 @@ internal enum L10n {
       internal static let continents = L10n.tr("Localizable", "TabBar.Item.Continents")
       /// Extras
       internal static let extra = L10n.tr("Localizable", "TabBar.Item.Extra")
+      /// Plans
+      internal static let plans = L10n.tr("Localizable", "TabBar.Item.Plans")
       /// Subscribed
       internal static let subscribedNodes = L10n.tr("Localizable", "TabBar.Item.SubscribedNodes")
     }
