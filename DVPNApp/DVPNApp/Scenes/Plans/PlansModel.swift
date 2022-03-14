@@ -49,14 +49,20 @@ extension PlansModel {
     func isSubscribed(to plan: UInt64) -> Bool {
         subscriptions.contains(where: { $0.plan == plan })
     }
-
+    
     func refresh() {
         context.sentinelService.queryPlans(for: constants.providerAddress) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case let .failure(error):
-                self?.eventSubject.send(.error(error))
+                self.eventSubject.send(.error(error))
             case let .success(plans):
-                self?.eventSubject.send(.plans(plans))
+                self.context.nodesService.isLoadingSubscriptions
+                    .first(where: { !$0 })
+                    .sink(receiveValue: { _ in
+                        self.eventSubject.send(.plans(plans))
+                    })
+                    .store(in: &self.cancellables)
             }
         }
     }
