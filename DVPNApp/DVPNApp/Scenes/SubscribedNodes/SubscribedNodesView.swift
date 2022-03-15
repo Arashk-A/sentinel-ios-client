@@ -75,8 +75,7 @@ extension SubscribedNodesView {
                     viewModel.alertContent.alert
                 }
             }
-            // TODO: uncomment when subscription cancellation failure is solve
-//            .onDelete(perform: viewModel.delete)
+            .onDelete(perform: viewModel.delete)
         }
         .listStyle(PlainListStyle())
     }
