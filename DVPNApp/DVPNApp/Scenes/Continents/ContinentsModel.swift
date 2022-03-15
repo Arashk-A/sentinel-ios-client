@@ -56,7 +56,7 @@ final class ContinentsModel {
                     self?.eventSubject.send(.setNumberOfNodesInContinent)
                 }
             }).store(in: &cancellables)
-        
+
         startObservingStatuses()
     }
 }

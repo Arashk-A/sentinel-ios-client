@@ -68,12 +68,6 @@ final class SubscribedNodesModel {
         self.context = context
 
         loadSubscriptions()
-        
-        context.nodesService.loadAllNodesIfNeeded { result in
-            if case let .success(nodes) = result {
-                context.nodesService.loadNodesInfo(for: nodes)
-            }
-        }
     }
 }
 

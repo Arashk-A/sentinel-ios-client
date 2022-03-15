@@ -244,7 +244,7 @@ extension ConnectionModel {
         reconnect: Bool
     ) {
         // connect to last user subscription
-        self.subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
+        subscription = subscriptions.sorted(by: { $0.id > $1.id }).first
         
         guard let subscription = subscription else {
             show(error: ConnectionModelError.emptySubscriptions)
@@ -267,10 +267,10 @@ extension ConnectionModel {
                 }
             }
         } else {
-            self.subscriptionType = .node(subscription.node)
+            subscriptionType = .node(subscription.node)
         }
         
-        self.handleConnection(reconnect: reconnect)
+        handleConnection(reconnect: reconnect)
     }
 
     private func handleConnection(reconnect: Bool) {
