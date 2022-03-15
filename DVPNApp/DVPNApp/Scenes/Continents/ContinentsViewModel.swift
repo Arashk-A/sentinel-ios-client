@@ -61,6 +61,7 @@ final class ContinentsViewModel: ObservableObject {
     }
     
     func viewWillAppear() {
+        numberOfNodesInContinent = model.numberOfNodesInContinent
         model.connectIfNeeded()
         model.refreshStatus()
     }

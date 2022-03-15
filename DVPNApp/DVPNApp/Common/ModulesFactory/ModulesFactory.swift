@@ -32,21 +32,15 @@ final class ModulesFactory {
 
 extension ModulesFactory {
     func detectStartModule(for window: UIWindow) {
-        context.nodesService.loadAllNodes { [weak self] result in
-            if case let .success(nodes) = result {
-                self?.context.nodesService.loadNodesInfo(for: nodes)
-            }
-        }
-        
         guard context.generalInfoStorage.didPassOnboarding() else {
             makeOnboardingModule(for: window)
             return
         }
-        
-        makeEmptyModule(for: window)
-        
-        context.preloadService.loadData { [weak self] in
-            self?.makeTabbar(for: window)
+
+        makeEmptyModule(on: window) { [weak self] in
+            self?.context.preloadService.loadData {
+                self?.makeTabbar(for: window)
+            }
         }
     }
 
@@ -80,11 +74,23 @@ extension ModulesFactory {
         ContinentsCoordinator(context: context, navigation: navigation).start()
     }
     
-    func makeEmptyModule(for window: UIWindow) {
+    func makeEmptyModule(
+        on window: UIWindow,
+        for interval: DispatchTime = .now() + 2,
+        completion: @escaping () -> Void
+    ) {
+        context.nodesService.loadAllNodes { [weak self] result in
+            if case let .success(nodes) = result {
+                self?.context.nodesService.loadNodesInfo(for: nodes)
+            }
+        }
+
         let storyboard = UIStoryboard(name: "EmptyScreen", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "EmptyViewController")
         
         window.rootViewController = controller
+
+        DispatchQueue.main.asyncAfter(deadline: interval, execute: completion)
     }
     
     func makeNodeDetailsModule(

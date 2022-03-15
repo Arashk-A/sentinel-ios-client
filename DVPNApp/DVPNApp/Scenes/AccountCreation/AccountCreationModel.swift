@@ -38,7 +38,7 @@ enum AccountCreationModelError: LocalizedError {
 }
 
 final class AccountCreationModel {
-    typealias Context = HasSecurityService & HasWalletStorage
+    typealias Context = HasSecurityService & HasWalletStorage & HasNodesService
     private let context: Context
 
     private let eventSubject = PassthroughSubject<AccountCreationModelEvent, Never>()
@@ -85,7 +85,7 @@ final class AccountCreationModel {
 
     func saveWallet(mnemonic: [String]) {
         let mnemonic = mnemonic.map { $0.trimmingCharacters(in: .whitespaces) }
-        
+
         switch context.securityService.restore(from: mnemonic) {
         case .failure(let error):
             eventSubject.send(.error(error))

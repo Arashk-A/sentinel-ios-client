@@ -18,6 +18,8 @@ private let constants = Constants()
 final class NodesService {
     private let nodesStorage: StoresNodes
     private let sentinelService: SentinelService
+
+    private var loadedNodes: Set<SentinelNode> = []
     
     @Published private(set) var _availableNodesOfSelectedContinent: [SentinelNode] = []
     @Published private(set) var _loadedNodesCount = 0
@@ -82,7 +84,7 @@ extension NodesService: NodesServiceType {
     }
     
     func loadNodesInfo(for continent: Continent) {
-        let sentinelNodes = nodesStorage.sentinelNodes
+        let sentinelNodes = loadedNodes
             .filter { sentinelNode in
                 guard let node = sentinelNode.node else {
                     return false
@@ -139,7 +141,7 @@ extension NodesService: NodesServiceType {
             nodesInContinents[$0] = 0
         }
         
-        nodesStorage.sentinelNodes
+        loadedNodes
             .forEach { node in
                 guard let node = node.node else { return }
                 
@@ -153,7 +155,7 @@ extension NodesService: NodesServiceType {
     }
     
     var nodes: [SentinelNode] {
-        nodesStorage.sentinelNodes
+        Array(loadedNodes)
     }
     
     func loadActiveSubscriptions(
@@ -222,6 +224,7 @@ extension NodesService {
         }
 
         nodesStorage.save(sentinelNodes: newSentinelNodesMutated)
+        loadedNodes.formUnion(nodesStorage.sentinelNodes)
     }
     
     private func loadLittlePortion(
@@ -252,6 +255,7 @@ extension NodesService {
 
         group.notify(queue: .main) { [weak self] in
             self?.nodesStorage.save(sentinelNodes: loadedPortion)
+            self?.loadedNodes.formUnion(loadedPortion)
             completion()
         }
     }

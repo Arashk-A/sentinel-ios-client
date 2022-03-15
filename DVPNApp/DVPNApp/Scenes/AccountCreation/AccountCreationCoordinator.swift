@@ -58,7 +58,9 @@ extension AccountCreationCoordinator: RouterType {
             }
         case .openNodes:
             if let window = window {
-                ModulesFactory.shared.makeTabbar(for: window)
+                ModulesFactory.shared.makeEmptyModule(on: window, for: .now() + 4) {
+                    ModulesFactory.shared.makeTabbar(for: window)
+                }
             }
         case let .title(title):
             rootController?.title = title
