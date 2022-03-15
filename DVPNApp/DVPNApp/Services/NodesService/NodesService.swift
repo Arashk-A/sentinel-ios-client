@@ -61,6 +61,8 @@ extension NodesService: NodesServiceType {
     func loadAllNodesIfNeeded(completion: @escaping ((Result<[SentinelNode], Error>) -> Void)) {
         if nodesStorage.sentinelNodes.isEmpty {
             loadAllNodes(completion: completion)
+        } else {
+            completion(.success(nodesStorage.sentinelNodes))
         }
     }
     
