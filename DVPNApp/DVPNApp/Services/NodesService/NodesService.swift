@@ -84,7 +84,7 @@ extension NodesService: NodesServiceType {
     }
     
     func loadNodesInfo(for continent: Continent) {
-        let sentinelNodes = loadedNodes
+        let sentinelNodes = Array(loadedNodes)
             .filter { sentinelNode in
                 guard let node = sentinelNode.node else {
                     return false
