@@ -334,15 +334,7 @@ extension ConnectionModel {
             switch result {
             case .failure(let error):
                 self?.set(sessionStart: nil)
-
-                if error.asAFError?.responseCode == 400, let selectedNode = self?.selectedNode {
-                    self?.eventSubject.send(.resubscribe(to: selectedNode))
-                    self?.stopLoading()
-                    return
-                }
-
                 self?.show(error: error)
-
             case .success(let id):
                 self?.set(sessionStart: Date())
                 self?.fetchConnectionData(remoteURLString: nodeURL, id: id)
@@ -475,6 +467,12 @@ extension ConnectionModel {
 
             switch result {
             case let .failure(error):
+                if error.asAFError?.responseCode == 400, let selectedNode = self.selectedNode {
+                    self.eventSubject.send(.resubscribe(to: selectedNode))
+                    self.stopLoading()
+                    return
+                }
+                
                 self.show(error: error)
             case let .success((data, wgKey)):
                 self.context.connectionInfoStorage.set(sessionId: Int(id))
