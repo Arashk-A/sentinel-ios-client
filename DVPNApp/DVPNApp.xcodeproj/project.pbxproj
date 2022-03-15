@@ -2016,7 +2016,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/solarlabsteam/sentinel-wallet-sdk-ios.git";
 			requirement = {
-				branch = "plan-subscription";
+				branch = develop;
 				kind = branch;
 			};
 		};
