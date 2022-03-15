@@ -325,7 +325,12 @@ extension ConnectionModel {
 
     private func startSession(on subscription: SentinelWallet.Subscription, nodeURL: String) {
         eventSubject.send(.updateConnection(status: .sessionBroadcast))
-        context.sentinelService.startNewSession(on: subscription) { [weak self] result in
+        
+        guard let nodeAddress = context.connectionInfoStorage.lastSelectedNode() else {
+            return
+        }
+        
+        context.sentinelService.startNewSession(on: subscription.id, nodeAddress: nodeAddress) { [weak self] result in
             switch result {
             case .failure(let error):
                 self?.set(sessionStart: nil)
