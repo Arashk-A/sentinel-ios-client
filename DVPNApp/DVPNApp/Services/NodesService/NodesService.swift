@@ -32,6 +32,8 @@ final class NodesService {
     init(nodesStorage: StoresNodes = RealmStorage(), sentinelService: SentinelService) {
         self.nodesStorage = nodesStorage
         self.sentinelService = sentinelService
+        
+        loadedNodes = Set(nodesStorage.sentinelNodes)
     }
 }
 
@@ -61,7 +63,7 @@ extension NodesService: NodesServiceType {
     }
     
     func loadAllNodesIfNeeded(completion: @escaping ((Result<[SentinelNode], Error>) -> Void)) {
-        if nodesStorage.sentinelNodes.isEmpty {
+        if loadedNodes.isEmpty {
             loadAllNodes(completion: completion)
         } else {
             completion(.success([]))

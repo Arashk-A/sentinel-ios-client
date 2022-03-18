@@ -36,11 +36,10 @@ extension ModulesFactory {
             makeOnboardingModule(for: window)
             return
         }
-
+        context.preloadService.loadData {}
+        
         makeEmptyModule(on: window) { [weak self] in
-            self?.context.preloadService.loadData {
-                self?.makeTabbar(for: window)
-            }
+            self?.makeTabbar(for: window)
         }
     }
 
@@ -76,7 +75,7 @@ extension ModulesFactory {
     
     func makeEmptyModule(
         on window: UIWindow,
-        for interval: DispatchTime = .now() + 2,
+        for interval: DispatchTime = .now() + 1,
         completion: @escaping () -> Void
     ) {
         context.nodesService.loadAllNodes { [weak self] result in

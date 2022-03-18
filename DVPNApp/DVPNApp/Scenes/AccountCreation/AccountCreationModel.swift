@@ -38,7 +38,7 @@ enum AccountCreationModelError: LocalizedError {
 }
 
 final class AccountCreationModel {
-    typealias Context = HasSecurityService & HasWalletStorage & HasNodesService
+    typealias Context = HasSecurityService & HasWalletStorage & HasNodesService & HasPreloadService
     private let context: Context
 
     private let eventSubject = PassthroughSubject<AccountCreationModelEvent, Never>()
@@ -96,6 +96,7 @@ final class AccountCreationModel {
             }
             context.walletStorage.set(wallet: result)
             ModulesFactory.shared.resetWalletContext()
+            context.preloadService.loadData {}
 
             eventSubject.send(.updateWallet)
         }
