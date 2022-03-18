@@ -25,14 +25,14 @@ enum SubscriptionsState {
 
 enum SubscribedNodesModelError: LocalizedError {
     case faliToCancelSubscription
-    case newSubscription
+    case activeSession
 
     var errorDescription: String? {
         switch self {
         case .faliToCancelSubscription:
             return L10n.SubscribedNodes.Error.subscriptionCancellationFailed
-        case .newSubscription:
-            return L10n.SubscribedNodes.Error.newSubscription
+        case .activeSession:
+            return L10n.SubscribedNodes.Error.activeSession
         }
     }
 }
@@ -123,9 +123,9 @@ extension SubscribedNodesModel {
                     case true:
                         self?.handleCancellation(node: node)
                     case false:
-                        // It seems we get this messages usually for new subscriptions
+                        // Subscription can not be cancelled if active sessions exist
                         if result.rawLog.contains("can not cancel") {
-                            self?.handleCancellationFailure(with: SubscribedNodesModelError.newSubscription)
+                            self?.handleCancellationFailure(with: SubscribedNodesModelError.activeSession)
                             return
                         }
                         

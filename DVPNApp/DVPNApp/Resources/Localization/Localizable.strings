@@ -93,7 +93,7 @@
 "SubscribedNodes.CancelSubscription.Title" = "Unsubscribe from %@?";
 "SubscribedNodes.SubscriptionCanceled" = "Successfully unsubscribed from %@";
 "SubscribedNodes.Error.SubscriptionCancellationFailed" = "Subscription cancellation failed";
-"SubscribedNodes.Error.NewSubscription" = "It seems the subscription is new, it can not be cancelled. Please, try again later";
+"SubscribedNodes.Error.ActiveSession" = "Subscriptions can not be cancelled while you have an active session. Please, try again later";
 
 "NodeDetails.Title" = "Details";
 "NodeDetails.Connect" = "CONNECT NOW";
