@@ -96,7 +96,6 @@ final class AccountCreationModel {
             }
             context.walletStorage.set(wallet: result)
             ModulesFactory.shared.resetWalletContext()
-            context.preloadService.loadData {}
 
             eventSubject.send(.updateWallet)
         }

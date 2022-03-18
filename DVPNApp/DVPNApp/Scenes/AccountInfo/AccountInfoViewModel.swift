@@ -11,6 +11,7 @@ import SentinelWallet
 import Combine
 import UIKit.UIImage
 import EFQRCode
+import UIKit
 
 final class AccountInfoViewModel: ObservableObject {
     typealias Router = AnyRouter<Route>
@@ -22,7 +23,7 @@ final class AccountInfoViewModel: ObservableObject {
         case purchases
     }
     
-    @Published private(set) var qrCode: UIImage
+    @Published private(set) var qrCode: UIImage = UIImage()
     @Published private(set) var address: String
     @Published private(set) var balance: String?
 
@@ -32,15 +33,6 @@ final class AccountInfoViewModel: ObservableObject {
     init(model: AccountInfoModel, router: Router) {
         self.model = model
         self.router = router
-        
-        // swiftlint:disable force_unwrapping
-        self.qrCode = UIImage(
-            cgImage: EFQRCode.generate(
-                for: model.address,
-                backgroundColor: CGColor.init(gray: 0, alpha: 0)
-            )!
-        )
-        // swiftlint:enable force_unwrapping
         
         self.address = model.address
 
@@ -57,7 +49,6 @@ final class AccountInfoViewModel: ObservableObject {
             .store(in: &cancellables)
         
         model.setInitialBalance()
-        refresh()
     }
 }
 
@@ -70,6 +61,15 @@ extension AccountInfoViewModel {
     
     func refresh() {
         model.refresh()
+        
+        // swiftlint:disable force_unwrapping
+        qrCode = UIImage(
+            cgImage: EFQRCode.generate(
+                for: model.address,
+                backgroundColor: CGColor.init(gray: 0, alpha: 0)
+            )!
+        )
+        // swiftlint:enable force_unwrapping
     }
 }
 
