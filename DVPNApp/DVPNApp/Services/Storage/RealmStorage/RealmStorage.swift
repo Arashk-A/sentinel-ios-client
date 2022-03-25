@@ -19,13 +19,17 @@ final class RealmStorage {
     }
     
     static func prepare() {
-        let currentSchemaVersion: UInt64 = 1
+        let currentSchemaVersion: UInt64 = 2
         
         let config = Realm.Configuration(
             schemaVersion: currentSchemaVersion,
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
-            migrationBlock: { migration, oldSchemaVersion in }
+            migrationBlock: { migration, oldSchemaVersion in
+                if oldSchemaVersion < 2 {
+                    RealmMigrator.migrateToVersion2(migration: migration)
+                }
+            }
         )
         
         // Tell Realm to use this new configuration object for the default Realm
@@ -38,4 +42,10 @@ final class RealmStorage {
 
 // MARK: - Migrations
 
-enum RealmMigrator {}
+enum RealmMigrator {
+    static func migrateToVersion2(migration: Migration) {
+        migration.enumerateObjects(ofType: LocationObject.className()) { oldObject, newObject in
+            newObject?["continent"] = ""
+        }
+    }
+}

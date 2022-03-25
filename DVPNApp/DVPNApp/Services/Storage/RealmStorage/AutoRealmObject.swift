@@ -192,6 +192,7 @@ extension Handshake: Persistable {
 public class LocationObject: EmbeddedObject {
     @objc dynamic var city: String?
     @objc dynamic var country: String?
+    @objc dynamic var continent: String?
 }
 
 // MARK: Location: Persistable
@@ -200,6 +201,7 @@ extension Location: Persistable {
         self.init(
             city: managedObject.city!,
             country: managedObject.country!,
+            continent: managedObject.continent!,
             latitude: 0,
             longitude: 0
         )
@@ -210,6 +212,7 @@ extension Location: Persistable {
 
         obj.city = city
         obj.country = country
+        obj.continent = continent
 
         return obj
     }
