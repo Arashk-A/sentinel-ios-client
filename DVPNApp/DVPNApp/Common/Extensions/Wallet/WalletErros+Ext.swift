@@ -17,6 +17,8 @@ extension SentinelServiceError: LocalizedError {
             return L10n.Error.unavailableNode
         case .sessionStartFailed:
             return L10n.Error.connectionParsingFailed
+        case .sessionsStopFailed:
+            return L10n.Error.sessionStopFailed
         }
     }
 }

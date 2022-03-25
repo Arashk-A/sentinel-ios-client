@@ -126,6 +126,7 @@
 "Error.GRPCError.RPCCancelled" = "Request was cancelled.";
 "Error.UnavailableNode" = "Selected node is temporary unavailable. Please, try later or select another node";
 "Error.ConnectionParsingFailed" = "Failed to start a session. Please, try again or select another node";
+"Error.SessionStopFailed" = "Failed to stop a session. Please, try again later";
 "Error.TunnelCreationDenied" = "Please allow the tunnel creation to connect to your session";
 
 "SentinelService.Error.BroadcastFailed" = "Couldn't process the broadcast. Please, check your balance and try again later";

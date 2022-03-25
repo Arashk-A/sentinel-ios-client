@@ -223,6 +223,8 @@ internal enum L10n {
   internal enum Error {
     /// Failed to start a session. Please, try again or select another node
     internal static let connectionParsingFailed = L10n.tr("Localizable", "Error.ConnectionParsingFailed")
+    /// Failed to stop a session. Please, try again later
+    internal static let sessionStopFailed = L10n.tr("Localizable", "Error.SessionStopFailed")
     /// Please allow the tunnel creation to connect to your session
     internal static let tunnelCreationDenied = L10n.tr("Localizable", "Error.TunnelCreationDenied")
     /// Selected node is temporary unavailable. Please, try later or select another node
