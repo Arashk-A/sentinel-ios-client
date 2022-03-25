@@ -30,14 +30,6 @@ final class ContinentDecoder {
         } catch {}
     }
     
-    func isInContinent(node: Node, continent: Continent) -> Bool {
-        let countryCode = countryCodeToContinent[
-            CountryFormatter.code(for: node.info.location.country) ?? ""
-        ]
-        
-        return countryCode == continent.rawValue
-    }
-    
     func getContinent(for node: Node) -> Continent? {
         let continentCode = countryCodeToContinent[
             CountryFormatter.code(for: node.info.location.country) ?? ""

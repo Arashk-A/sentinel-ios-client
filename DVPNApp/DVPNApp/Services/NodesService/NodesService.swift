@@ -91,11 +91,12 @@ extension NodesService: NodesServiceType {
                 guard let node = sentinelNode.node else {
                     return false
                 }
-                return ContinentDecoder.shared.isInContinent(node: node, continent: continent)
+                return node.info.location.continent == continent.rawValue
             }
         
         _availableNodesOfSelectedContinent = sentinelNodes
-
+        
+        // Otherwise it's already updating, no need to update one more time
         if _isAllLoaded {
             loadNodesInfo(for: sentinelNodes)
         }
@@ -147,8 +148,9 @@ extension NodesService: NodesServiceType {
             .forEach { node in
                 guard let node = node.node else { return }
                 
-                if let continent = ContinentDecoder().getContinent(for: node),
-                   let count = nodesInContinents[continent] {
+                let continent = Continent(rawValue: node.info.location.continent) ?? .AN
+                
+                if let count = nodesInContinents[continent] {
                     nodesInContinents[continent] = count + 1
                 }
             }
@@ -245,13 +247,22 @@ extension NodesService {
                     group.leave()
                     return
                 }
-                loadedPortion.append(sentinelNode)
+                
+                var mutableNode = sentinelNode
+                
+                if let node = sentinelNode.node {
+                    let continent = ContinentDecoder().getContinent(for: node)
+                    
+                    mutableNode.node?.info.location.continent = (continent ?? .AN).rawValue
+                }
+                
+                loadedPortion.append(mutableNode)
+                
                 group.leave()
-                guard let self = self, let node = sentinelNode.node else { return }
+                guard let self = self, let node = mutableNode.node else { return }
                 guard let row = self._availableNodesOfSelectedContinent
                         .firstIndex(where: { $0.address == node.info.address }) else { return }
-                let newSentinelNode = self._availableNodesOfSelectedContinent[row].set(node: node)
-                self._availableNodesOfSelectedContinent[row] = newSentinelNode
+                self._availableNodesOfSelectedContinent[row] = mutableNode
             }
         }
 
