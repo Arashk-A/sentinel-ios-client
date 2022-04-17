@@ -103,6 +103,14 @@ extension TunnelManager: TunnelManagerType {
         tunnelModel.interfaceModel[.listenPort] = port
 
         let host = "\(data[20]).\(data[21]).\(data[22]).\(data[23])"
+        
+        /*
+        // When the apps runs for the first time "peersModel" array have no values in it 
+        //   and this makes the app crash when trying to connect to an existing subscription or newly added subscription
+        //   "peersModel" is defined as private(set) so can't be modified outside of it's scope.
+        //  This is just for creating an issue on this repo.
+        */
+        
         tunnelModel.peersModel[0][.endpoint] = "\(host):\(port)"
 
         let peerPubKeyBytes = data.bytes[26...57]
